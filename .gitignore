@@ -1,0 +1,54 @@
+
+# Node / frontend
+node_modules/
+dist/
+build/
+/.parcel-cache/
+
+# Foundry / Solidity
+out/
+cache/
+lib/
+/.openzeppelin/
+
+# Scripts / artifacts
+*.log
+*.tsv
+
+# Environment / secrets
+.env
+.env.*
+.secrets
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Editors and OS
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+.DS_Store
+Thumbs.db
+
+# Editor swap/temp files
+*~
+*.swp
+*.swo
+
+# Hardhat (if someone uses it locally)
+artifacts/
+cache-hh/
+
+# Solidity coverage & tooling
+coverage/
+coverage.json
+
+# Misc
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
