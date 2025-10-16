@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { JSX, useState } from 'react';
 
-export default function ChooseUsernamePage() {
-  const [username, setUsername] = useState('');
+export default function ChooseUsernamePage(): JSX.Element {
+  const [username, setUsername] = useState<string>('');
 
-  const handleContinue = () => {
+  const handleContinue = (): void => {
     if (username) {
       alert(`Username selected: @${username}`);
     }
+  };
+
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''));
   };
 
   return (
@@ -43,7 +47,7 @@ export default function ChooseUsernamePage() {
               <input
                 type="text"
                 value={username}
-                onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
+                onChange={handleUsernameChange}
                 placeholder="username"
                 className="w-full bg-transparent border border-gray-700/50 rounded-2xl py-3 sm:py-4 pl-9 sm:pl-10 pr-4 sm:pr-5 text-white placeholder-gray-500 focus:outline-none focus:border-purple-600 transition-colors text-base sm:text-lg"
               />

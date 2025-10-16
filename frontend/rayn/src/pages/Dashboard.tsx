@@ -1,7 +1,16 @@
+import React from 'react';
 import { Bell, Gift, ArrowUp, ArrowDown } from 'lucide-react';
 
-export default function Dashboard() {
-  const transactions = [
+interface Transaction {
+  id: number;
+  amount: number;
+  description: string;
+  time: string;
+  avatar: string;
+}
+
+export default function Dashboard(): JSX.Element {
+  const transactions: Transaction[] = [
     {
       id: 1,
       amount: 250.00,

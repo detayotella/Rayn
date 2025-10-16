@@ -1,6 +1,7 @@
+import { JSX } from "react";
 import { Link } from "react-router";
 
-export default function Onboarding() {
+export default function Onboarding(): JSX.Element {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#191022] to-[#231036] flex items-center justify-center p-4 sm:p-6 lg:p-8 font-DMSans">
       <div className="w-full max-w-xl text-center">

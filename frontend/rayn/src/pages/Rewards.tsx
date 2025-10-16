@@ -1,8 +1,8 @@
+import React from 'react';
 import rewards from '../assets/rewards.jpg';
 import { motion } from "framer-motion";
 import token from '../assets/naira.svg';
 import token2 from '../assets/usdc.svg';
-
 
 const bouncingVariants = {
   bounce: {
@@ -11,13 +11,13 @@ const bouncingVariants = {
     transition: {
       duration: 10,
       repeat: Infinity,
-      repeatType: "mirror",
-      ease: "easeInOut",
+      repeatType: "mirror" as const,
+      ease: "easeInOut" as const,
     },
   },
 };
 
-export default function Rewards() {
+const Rewards: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#191022] via-[#231036] to-[#191022] text-white font-DMSans">
       {/* Header */}
@@ -86,4 +86,6 @@ export default function Rewards() {
       </main>
     </div>
   );
-}
+};
+
+export default Rewards;
