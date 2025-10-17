@@ -1,10 +1,23 @@
 import React, { useState } from 'react';
 import { X, Link2, CheckCircle } from 'lucide-react';
+import Logo from '../assets/Logo.png';
 
-export default function Receive() {
-    const [amount, setAmount] = useState('');
-    const [note, setNote] = useState('');
-    const [showNotification, setShowNotification] = useState(true);
+export default function Receive(): React.JSX.Element {
+    const [amount, setAmount] = useState<string>('');
+    const [note, setNote] = useState<string>('');
+    const [showNotification, setShowNotification] = useState<boolean>(true);
+
+    const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        setAmount(e.target.value);
+    };
+
+    const handleNoteChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        setNote(e.target.value);
+    };
+
+    const handleCloseNotification = (): void => {
+        setShowNotification(false);
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-[#191022] via-[#231036] to-[#191022] text-white">
@@ -13,9 +26,7 @@ export default function Receive() {
                 <div className="max-w-4xl mx-auto flex items-center justify-between">
                     {/* Logo */}
                     <div className="flex items-center gap-2 sm:gap-3">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg flex items-center justify-center transform rotate-45">
-                            <div className="w-5 h-5 sm:w-6 sm:h-6 bg-white rounded transform -rotate-45"></div>
-                        </div>
+                        <img src={Logo} alt="Rayn logo" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
                         <span className="text-xl sm:text-2xl font-bold">Rayn</span>
                     </div>
 
@@ -83,7 +94,7 @@ export default function Receive() {
                                     <input
                                         type="text"
                                         value={amount}
-                                        onChange={(e) => setAmount(e.target.value)}
+                                        onChange={handleAmountChange}
                                         placeholder="$ 0.00"
                                         className="w-full bg-[#1e1533] border border-purple-900/30 rounded-xl py-3 sm:py-4 px-4 text-base text-white placeholder-gray-500 focus:outline-none focus:border-purple-600/50 transition-colors"
                                     />
@@ -97,7 +108,7 @@ export default function Receive() {
                                     <input
                                         type="text"
                                         value={note}
-                                        onChange={(e) => setNote(e.target.value)}
+                                        onChange={handleNoteChange}
                                         placeholder="For coffee"
                                         className="w-full bg-[#1e1533] border border-purple-900/30 rounded-xl py-3 sm:py-4 px-4 text-base text-white placeholder-gray-500 focus:outline-none focus:border-purple-600/50 transition-colors"
                                     />
@@ -121,7 +132,7 @@ export default function Receive() {
                             <div className="absolute top-0 right-0 w-full max-w-xs">
                                 <div className="bg-gradient-to-br from-teal-900/40 to-teal-800/20 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-teal-700/30 relative">
                                     <button
-                                        onClick={() => setShowNotification(false)}
+                                        onClick={handleCloseNotification}
                                         className="absolute top-3 right-3 text-gray-400 hover:text-white transition-colors"
                                     >
                                         <X className="w-4 h-4" />

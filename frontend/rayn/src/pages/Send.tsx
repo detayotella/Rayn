@@ -1,10 +1,23 @@
 import React, { useState } from 'react';
 import { X, User } from 'lucide-react';
+import Logo from '../assets/Logo.png';
 
-export default function Send() {
-  const [recipient, setRecipient] = useState('');
-  const [amount, setAmount] = useState('');
-  const [note, setNote] = useState('');
+const Send: React.FC = () => {
+  const [recipient, setRecipient] = useState<string>('');
+  const [amount, setAmount] = useState<string>('');
+  const [note, setNote] = useState<string>('');
+
+  const handleRecipientChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setRecipient(e.target.value);
+  };
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setAmount(e.target.value);
+  };
+
+  const handleNoteChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+    setNote(e.target.value);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#191022] via-[#231036] to-[#191022] text-white font-DMSans">
@@ -13,11 +26,7 @@ export default function Send() {
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center">
-              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M13 10h5l-6 8v-6H7l6-8v6z"/>
-              </svg>
-            </div>
+            <img src={Logo} alt="Rayn logo" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
             <span className="text-xl sm:text-2xl font-bold">Rayn</span>
           </div>
 
@@ -50,7 +59,7 @@ export default function Send() {
               <input
                 type="text"
                 value={recipient}
-                onChange={(e) => setRecipient(e.target.value)}
+                onChange={handleRecipientChange}
                 placeholder="@username or wallet address"
                 className="w-full bg-[#1e1533] border border-purple-900/30 rounded-xl sm:rounded-2xl py-4 sm:py-5 pl-12 pr-4 text-base sm:text-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-600/50 transition-colors"
               />
@@ -67,7 +76,7 @@ export default function Send() {
               <input
                 type="text"
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                onChange={handleAmountChange}
                 placeholder="0.00"
                 className="w-full bg-[#1e1533] border border-purple-900/30 rounded-xl sm:rounded-2xl py-4 sm:py-5 pl-12 pr-4 text-base sm:text-lg text-white placeholder-gray-500 text-right focus:outline-none focus:border-purple-600/50 transition-colors"
               />
@@ -81,7 +90,7 @@ export default function Send() {
             </label>
             <textarea
               value={note}
-              onChange={(e) => setNote(e.target.value)}
+              onChange={handleNoteChange}
               placeholder="What's this for?"
               rows={4}
               className="w-full bg-[#1e1533] border border-purple-900/30 rounded-xl sm:rounded-2xl py-4 px-4 text-base sm:text-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-600/50 transition-colors resize-none"
@@ -102,4 +111,6 @@ export default function Send() {
       </main>
     </div>
   );
-}
+};
+
+export default Send;

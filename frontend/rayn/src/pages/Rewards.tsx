@@ -1,8 +1,9 @@
+import React from 'react';
 import rewards from '../assets/rewards.jpg';
 import { motion } from "framer-motion";
 import token from '../assets/naira.svg';
 import token2 from '../assets/usdc.svg';
-
+import Logo from '../assets/Logo.png';
 
 const bouncingVariants = {
   bounce: {
@@ -11,21 +12,19 @@ const bouncingVariants = {
     transition: {
       duration: 10,
       repeat: Infinity,
-      repeatType: "mirror",
-      ease: "easeInOut",
+      repeatType: "mirror" as const,
+      ease: "easeInOut" as const,
     },
   },
 };
 
-export default function Rewards() {
+const Rewards: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#191022] via-[#231036] to-[#191022] text-white font-DMSans">
       {/* Header */}
       <header className="p-4 sm:p-6 md:p-8 border-b border-purple-800/30">
         <div className="flex items-center gap-2 sm:gap-3">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg flex items-center justify-center transform rotate-45">
-            <div className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 bg-white rounded transform -rotate-45"></div>
-          </div>
+          <img src={Logo} alt="Rayn logo" className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain" />
           <span className="text-xl sm:text-2xl md:text-3xl font-bold">Rayn</span>
         </div>
       </header>
@@ -86,4 +85,6 @@ export default function Rewards() {
       </main>
     </div>
   );
-}
+};
+
+export default Rewards;
