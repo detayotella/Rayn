@@ -1,9 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router';
 import rewards from '../assets/rewards.jpg';
 import { motion } from "framer-motion";
 import token from '../assets/naira.svg';
 import token2 from '../assets/usdc.svg';
 import Logo from '../assets/Logo.png';
+import AppLayout from '../components/layout/AppLayout';
+import { Bell } from 'lucide-react';
 
 const bouncingVariants = {
   bounce: {
@@ -19,13 +22,43 @@ const bouncingVariants = {
 };
 
 const Rewards: React.FC = () => {
+  const navigate = useNavigate();
+  
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#191022] via-[#231036] to-[#191022] text-white font-DMSans">
-      {/* Header */}
-      <header className="p-4 sm:p-6 md:p-8 border-b border-purple-800/30">
-        <div className="flex items-center gap-2 sm:gap-3">
-          <img src={Logo} alt="Rayn logo" className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain" />
-          <span className="text-xl sm:text-2xl md:text-3xl font-bold">Rayn</span>
+    <AppLayout>
+      {/* Page Header */}
+      <header className="border-b border-purple-900/30 bg-[#1a0b2e]/50 backdrop-blur-sm sticky top-0 z-30">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Mobile: Logo */}
+            <div className="lg:hidden flex items-center gap-2">
+              <img src={Logo} alt="Rayn logo" className="w-8 h-8 object-contain" />
+              <span className="text-xl font-bold">Rayn</span>
+            </div>
+            
+            {/* Desktop: Page Title */}
+            <h1 className="hidden lg:block text-2xl font-bold text-white">Rewards</h1>
+
+            {/* User Actions */}
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => navigate('/notifications')}
+                className="p-2 hover:bg-purple-900/30 rounded-full transition-colors"
+              >
+                <Bell className="w-5 h-5" />
+              </button>
+              <button 
+                onClick={() => navigate('/profile-summary')}
+                className="w-9 h-9 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 overflow-hidden ring-2 ring-purple-500/20 hover:ring-purple-500/40 transition-all"
+              >
+                <img
+                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop"
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -83,7 +116,7 @@ const Rewards: React.FC = () => {
           </button>
         </div>
       </main>
-    </div>
+    </AppLayout>
   );
 };
 

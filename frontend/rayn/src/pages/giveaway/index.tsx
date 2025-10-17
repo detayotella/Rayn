@@ -7,33 +7,110 @@ import {
   ShieldCheck,
   Users,
   Clock,
+  Search,
+  Plus,
+  TrendingUp,
+  Zap,
+  DollarSign,
 } from 'lucide-react';
 import heroIllustration from '../../assets/communitygiveaway.jpg';
 import referralIllustration from '../../assets/referral.jpg';
 import avatarImage from '../../assets/avatar1.jpg';
-import Navigation from '../../components/modules/Home/Navigation';
-import { useState } from 'react';
 import Logo from '../../assets/Logo.png';
+import AppLayout from '../../components/layout/AppLayout';
+
+const featuredGiveaway = {
+  id: 0,
+  title: '🎉 Mega Community Giveaway',
+  description: 'Join our biggest giveaway yet and win big!',
+  type: 'Public',
+  typeVariant: 'public' as const,
+  participants: '2,547 Participants',
+  participantCount: 2547,
+  timeline: 'Ends in 12h 45m',
+  amount: '$1,000.00',
+  status: 'featured',
+  friendsIn: ['Sarah', 'John', 'Michael', 'Emma'],
+};
+
+const endingSoon = [
+  {
+    id: 1,
+    title: 'Flash Friday Bonus',
+    participants: 234,
+    timeline: 'Ends in 2h 15m',
+    amount: '$50.00',
+    typeVariant: 'public' as const,
+  },
+  {
+    id: 2,
+    title: 'Weekend Special',
+    participants: 445,
+    timeline: 'Ends in 5h 30m',
+    amount: '$75.00',
+    typeVariant: 'public' as const,
+  },
+];
+
+const easyToWin = [
+  {
+    id: 3,
+    title: 'Newcomer Welcome',
+    participants: 12,
+    timeline: 'Ends in 2 days',
+    amount: '$25.00',
+    typeVariant: 'private' as const,
+  },
+  {
+    id: 4,
+    title: 'Early Bird Bonus',
+    participants: 34,
+    timeline: 'Ends in 1 day',
+    amount: '$30.00',
+    typeVariant: 'public' as const,
+  },
+];
+
+const bigPrizes = [
+  {
+    id: 5,
+    title: 'Monthly Mega Draw',
+    participants: 3421,
+    timeline: 'Ends in 15 days',
+    amount: '$2,500.00',
+    typeVariant: 'public' as const,
+  },
+  {
+    id: 6,
+    title: 'Platinum Pool',
+    participants: 1876,
+    timeline: 'Ends in 7 days',
+    amount: '$1,500.00',
+    typeVariant: 'private' as const,
+  },
+];
 
 const activeGiveaways = [
   {
-    id: 1,
+    id: 7,
     title: 'Weekly Community Pool',
     description: 'Join the community pool and share in weekly stablecoin rewards.',
     type: 'Public',
     typeVariant: 'public' as const,
     participants: '1,250 Participants',
+    participantCount: 1250,
     timeline: 'Ends in 3 days',
     amount: '$500.00',
     status: 'remaining',
   },
   {
-    id: 2,
+    id: 8,
     title: 'Private Beta Testers',
     description: 'Exclusive pool for early adopters helping us shape the Rayn experience.',
     type: 'Private',
     typeVariant: 'private' as const,
     participants: '50 Participants',
+    participantCount: 50,
     timeline: 'Ends in 10 days',
     amount: '$150.00',
     status: 'remaining',
@@ -71,39 +148,48 @@ const typeIcons = {
 
 
 const GiveawayPage: React.FC = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#0f051c] text-white font-DMSans">
-      <header className="border-b border-purple-900/30 bg-[#160728]/80 backdrop-blur-xl">
-        <div className="mx-10 flex h-16 sm:h-20  items-center justify-between px-4 sm:px-6 lg:px-0">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <button
-              type="button"
-              onClick={() => navigate(-1)}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-600 transition hover:bg-purple-700"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </button>
-            <img src={Logo} alt="Rayn logo" className="h-10 w-10 object-contain" />
-            <span className="text-xl sm:text-2xl font-semibold">Rayn</span>
-          </div>
-
-          {/* <Navigation 
-                  mobileMenuOpen={mobileMenuOpen} 
-                  setMobileMenuOpen={setMobileMenuOpen} 
-                /> */}
-          <div className="flex items-center gap-3 sm:gap-4">
-            <button className="rounded-full p-2 transition hover:bg-purple-900/40">
-              <Bell className="h-5 w-5" />
-            </button>
-            <div className="h-9 w-9 overflow-hidden rounded-full border border-purple-500/40 bg-gradient-to-br from-purple-500 to-pink-500 sm:h-10 sm:w-10">
-              <img
-                src={avatarImage}
-                alt="User avatar"
-                className="h-full w-full object-cover"
-              />
+    <AppLayout>
+      {/* Page Header */}
+      <header className="border-b border-purple-900/30 bg-[#1a0b2e]/50 backdrop-blur-sm sticky top-0 z-30">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Page Title */}
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                className="lg:hidden flex h-9 w-9 items-center justify-center rounded-full bg-purple-600 transition hover:bg-purple-700"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </button>
+              <div className="lg:hidden flex items-center gap-2">
+                <img src={Logo} alt="Rayn logo" className="w-8 h-8 object-contain" />
+                <span className="text-xl font-bold">Rayn</span>
+              </div>
+              <h1 className="hidden lg:block text-2xl font-bold text-white">Community Giveaways</h1>
+            </div>
+            
+            {/* User Actions */}
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => navigate('/notifications')}
+                className="p-2 hover:bg-purple-900/30 rounded-full transition-colors"
+              >
+                <Bell className="h-5 w-5" />
+              </button>
+              <button 
+                onClick={() => navigate('/profile-summary')}
+                className="h-9 w-9 overflow-hidden rounded-full border border-purple-500/40 bg-gradient-to-br from-purple-500 to-pink-500"
+              >
+                <img
+                  src={avatarImage}
+                  alt="User avatar"
+                  className="h-full w-full object-cover"
+                />
+              </button>
             </div>
           </div>
         </div>
@@ -142,6 +228,166 @@ const GiveawayPage: React.FC = () => {
                 </button>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Search and Create Section */}
+        <section className="mt-12">
+          <div className="flex flex-col sm:flex-row gap-4 items-stretch">
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search giveaways..."
+                className="w-full bg-purple-900/20 border border-purple-700/30 rounded-2xl py-4 pl-12 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-purple-600/50 transition-colors"
+              />
+            </div>
+            <Link to="/giveaway/create">
+              <button className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 px-8 py-4 rounded-2xl font-semibold transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/30">
+                <Plus className="w-5 h-5" />
+                Create Giveaway
+              </button>
+            </Link>
+          </div>
+        </section>
+
+        {/* Featured Giveaway */}
+        <section className="mt-12">
+          <h2 className="text-3xl font-bold mb-6 flex items-center gap-2">
+            <TrendingUp className="w-8 h-8 text-purple-400" />
+            Featured Giveaway
+          </h2>
+          <div className="rounded-3xl border border-purple-500/40 bg-gradient-to-br from-purple-600/20 to-pink-600/20 p-8 shadow-[0_20px_70px_rgba(168,85,247,0.4)] hover:shadow-[0_25px_80px_rgba(168,85,247,0.5)] transition-all cursor-pointer group">
+            <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
+              <div className="flex-1">
+                <h3 className="text-3xl font-bold mb-3 group-hover:text-purple-300 transition-colors">
+                  {featuredGiveaway.title}
+                </h3>
+                <p className="text-gray-300 mb-4">{featuredGiveaway.description}</p>
+                <div className="flex flex-wrap items-center gap-4 text-sm">
+                  <div className="flex items-center gap-2 text-purple-300">
+                    <Users className="w-5 h-5" />
+                    <span className="font-semibold">{featuredGiveaway.participantCount.toLocaleString()} joined</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-pink-300">
+                    <Clock className="w-5 h-5" />
+                    <span className="font-semibold">{featuredGiveaway.timeline}</span>
+                  </div>
+                  {featuredGiveaway.friendsIn.length > 0 && (
+                    <div className="flex items-center gap-2 text-yellow-300">
+                      <span className="text-sm">Friends in: {featuredGiveaway.friendsIn.slice(0, 3).join(', ')}
+                        {featuredGiveaway.friendsIn.length > 3 && ` +${featuredGiveaway.friendsIn.length - 3} more`}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="flex flex-col items-start lg:items-end gap-3">
+                <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-pink-400">
+                  {featuredGiveaway.amount}
+                </div>
+                <button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-3 rounded-2xl font-bold text-lg transition-all transform hover:scale-105 shadow-lg">
+                  Join Now
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Ending Soon */}
+        <section className="mt-16">
+          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            <Zap className="w-7 h-7 text-yellow-400" />
+            ⏰ Ending Soon
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {endingSoon.map((giveaway) => (
+              <div
+                key={giveaway.id}
+                className="rounded-2xl border border-orange-500/40 bg-gradient-to-br from-orange-900/30 to-red-900/20 p-6 hover:border-orange-400/60 transition-all cursor-pointer"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="text-xl font-bold mb-2">{giveaway.title}</h3>
+                    <p className="text-3xl font-bold text-orange-400">{giveaway.amount}</p>
+                  </div>
+                  <Clock className="w-6 h-6 text-orange-300 animate-pulse" />
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <Users className="w-4 h-4" />
+                    <span>{giveaway.participants} joined</span>
+                  </div>
+                  <span className="text-orange-300 font-semibold">{giveaway.timeline}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Easy to Win */}
+        <section className="mt-16">
+          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            <Users className="w-7 h-7 text-green-400" />
+            🎯 Easy to Win (Few Participants)
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {easyToWin.map((giveaway) => (
+              <div
+                key={giveaway.id}
+                className="rounded-2xl border border-green-500/40 bg-gradient-to-br from-green-900/30 to-emerald-900/20 p-6 hover:border-green-400/60 transition-all cursor-pointer"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="text-xl font-bold mb-2">{giveaway.title}</h3>
+                    <p className="text-3xl font-bold text-green-400">{giveaway.amount}</p>
+                  </div>
+                  <span className="bg-green-500/20 text-green-300 text-xs px-3 py-1 rounded-full font-semibold">
+                    High Chance!
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2 text-green-300 font-semibold">
+                    <Users className="w-4 h-4" />
+                    <span>Only {giveaway.participants} joined</span>
+                  </div>
+                  <span className="text-gray-400">{giveaway.timeline}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Big Prizes */}
+        <section className="mt-16">
+          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            <DollarSign className="w-7 h-7 text-yellow-400" />
+            💎 Big Prizes
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {bigPrizes.map((giveaway) => (
+              <div
+                key={giveaway.id}
+                className="rounded-2xl border border-yellow-500/40 bg-gradient-to-br from-yellow-900/30 to-amber-900/20 p-6 hover:border-yellow-400/60 transition-all cursor-pointer"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="text-xl font-bold mb-2">{giveaway.title}</h3>
+                    <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">
+                      {giveaway.amount}
+                    </p>
+                  </div>
+                  <span className="text-3xl">💰</span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center gap-2 text-gray-300">
+                    <Users className="w-4 h-4" />
+                    <span>{giveaway.participants.toLocaleString()} joined</span>
+                  </div>
+                  <span className="text-gray-400">{giveaway.timeline}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -262,7 +508,7 @@ const GiveawayPage: React.FC = () => {
           </div>
         </section>
       </main>
-    </div>
+    </AppLayout>
   );
 };
 

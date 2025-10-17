@@ -18,7 +18,6 @@ import Rewards from '../pages/Rewards';
 import Dashboard from "../pages/Dashboard";
 import Send from "../pages/Send";
 import Receive from "../pages/Receive";
-import ChooseUserName from '../pages/ChooseUserName';
 import CommunityGiveaway from "../pages/giveaway";
 import GiveawayDetails from "../pages/giveaway/giveawayDetails";
 import GiveawayStatus from '../pages/giveaway/giveawayStatus';
@@ -29,6 +28,8 @@ import Referrals from '../pages/Referrals';
 import Referred from '../pages/Referrals/Referred';
 import SignUp from '../pages/Login/SignUp';
 import RedeemReward from '../pages/Referrals/redeemReward';
+import SocialFeed from '../pages/SocialFeed';
+import CreateGiveaway from '../pages/giveaway/create';
 // Component mapping
 const componentMap = {
   Home,
@@ -37,7 +38,6 @@ const componentMap = {
   ProfileSummary,
   Rewards,
   Dashboard,
-  ChooseUserName,
   Send,
   Receive,
   CommunityGiveaway,
@@ -51,6 +51,8 @@ const componentMap = {
   SignUp,
   SignIn,
   RedeemReward,
+  SocialFeed,
+  CreateGiveaway,
 } as const;
 
 // Create router configuration

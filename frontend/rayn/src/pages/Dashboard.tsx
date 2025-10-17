@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
-import { Bell, Gift, ArrowUp, ArrowDown } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router';
+import { Bell, ArrowUp, ArrowDown, Gift } from 'lucide-react';
 import Logo from '../assets/Logo.png';
+import { useApp } from '../context/AppContext';
+import AppLayout from '../components/layout/AppLayout';
 
-interface Transaction {
-  id: number;
-  amount: number;
-  description: string;
-  time: string;
-  avatar: string;
-}
 
 export default function Dashboard(): React.JSX.Element {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, transactions: contextTransactions } = useApp();
   const locationState = (location.state as { profileImage?: string | null } | null) ?? undefined;
 
   useEffect(() => {
@@ -29,62 +26,37 @@ export default function Dashboard(): React.JSX.Element {
     setProfileImage(storedProfileImage ?? null);
   }, [locationState]);
 
-  const transactions: Transaction[] = [
-    {
-      id: 1,
-      amount: 250.00,
-      description: "Received from Sarah",
-      time: "2d ago",
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop"
-    },
-    {
-      id: 2,
-      amount: 150.00,
-      description: "Sent to David",
-      time: "3d ago",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop"
-    },
-    {
-      id: 3,
-      amount: 300.00,
-      description: "Received from Michael",
-      time: "5d ago",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop"
-    },
-    {
-      id: 4,
-      amount: 200.00,
-      description: "Sent to Jessica",
-      time: "7d ago",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop"
-    }
-  ];
+  // Use transactions from context
+  const transactions = contextTransactions.slice(0, 4); // Show only latest 4
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#191022] via-[#231036] to-[#191022] text-white">
-      {/* Header */}
-      <header className="border-b border-purple-900/30 bg-[#1a0b2e]/80 backdrop-blur-sm">
-        <div className="mx-2 px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 sm:h-20">
-            {/* Logo */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              <img src={Logo} alt="Rayn logo" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
-              <span className="text-xl sm:text-2xl font-bold">Rayn</span>
+    <AppLayout>
+      {/* Page Header */}
+      <header className="border-b border-purple-900/30 bg-[#1a0b2e]/50 backdrop-blur-sm sticky top-0 z-30">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Page Title - visible on mobile, hidden on desktop since sidebar shows logo */}
+            <div className="lg:hidden flex items-center gap-2">
+              <img src={Logo} alt="Rayn logo" className="w-8 h-8 object-contain" />
+              <span className="text-xl font-bold">Rayn</span>
             </div>
-
-            {/* Navigation */}
-            <nav className="hidden md:flex items-center gap-8">
-              <a href="#" className="text-white hover:text-purple-400 transition-colors">Home</a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">Transactions</a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">Giveaways</a>
-            </nav>
+            
+            <h1 className="hidden lg:block text-2xl font-bold text-white">Dashboard</h1>
 
             {/* User Actions */}
-            <div className="flex items-center gap-3 sm:gap-4">
-              <button className="p-2 hover:bg-purple-900/30 rounded-full transition-colors">
-                <Bell className="w-5 h-5 sm:w-6 sm:h-6" />
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => navigate('/notifications')}
+                className="p-2 hover:bg-purple-900/30 rounded-full transition-colors relative"
+              >
+                <Bell className="w-5 h-5" />
+                {/* Notification badge */}
+                <span className="absolute top-1 right-1 w-2 h-2 bg-purple-500 rounded-full"></span>
               </button>
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 overflow-hidden">
+              <button 
+                onClick={() => navigate('/profile-summary')}
+                className="w-9 h-9 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 overflow-hidden ring-2 ring-purple-500/20 hover:ring-purple-500/40 transition-all"
+              >
                 {profileImage ? (
                   <img
                     src={profileImage}
@@ -98,7 +70,7 @@ export default function Dashboard(): React.JSX.Element {
                     className="w-full h-full object-cover"
                   />
                 )}
-              </div>
+              </button>
             </div>
           </div>
         </div>
@@ -109,28 +81,46 @@ export default function Dashboard(): React.JSX.Element {
         {/* Balance Card */}
         <div className="bg-gradient-to-br from-purple-900/40 to-purple-800/20 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 mb-6 sm:mb-8 border border-purple-700/30 shadow-2xl">
           <p className="text-gray-400 text-sm sm:text-base mb-2">Your Balance</p>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold">$1,250.75</h1>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold">${user?.balance.toFixed(2) || '0.00'}</h1>
+          <p className="text-gray-500 text-xs sm:text-sm mt-2">≈ {(user?.balance || 0) * 1650} NGN</p>
         </div>
 
         {/* Action Buttons */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
-          <button className="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-semibold py-4 sm:py-5 px-6 rounded-xl sm:rounded-2xl text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-purple-500/30 flex items-center justify-center gap-2">
+          <button 
+            onClick={() => navigate('/send')}
+            className="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-semibold py-4 sm:py-5 px-6 rounded-xl sm:rounded-2xl text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg shadow-purple-500/30 flex items-center justify-center gap-2"
+          >
             <ArrowUp className="w-5 h-5" />
             Send
           </button>
-          <button className="bg-purple-900/40 hover:bg-purple-800/50 text-white font-semibold py-4 sm:py-5 px-6 rounded-xl sm:rounded-2xl text-base sm:text-lg transition-all duration-300 border border-purple-700/30 flex items-center justify-center gap-2">
+          <button 
+            onClick={() => navigate('/receive')}
+            className="bg-purple-900/40 hover:bg-purple-800/50 text-white font-semibold py-4 sm:py-5 px-6 rounded-xl sm:rounded-2xl text-base sm:text-lg transition-all duration-300 border border-purple-700/30 flex items-center justify-center gap-2"
+          >
             <ArrowDown className="w-5 h-5" />
             Receive
           </button>
-          <button className="bg-purple-900/40 hover:bg-purple-800/50 text-white font-semibold py-4 sm:py-5 px-6 rounded-xl sm:rounded-2xl text-base sm:text-lg transition-all duration-300 border border-purple-700/30 flex items-center justify-center gap-2">
+          <button 
+            onClick={() => navigate('/giveaway')}
+            className="bg-purple-900/40 hover:bg-purple-800/50 text-white font-semibold py-4 sm:py-5 px-6 rounded-xl sm:rounded-2xl text-base sm:text-lg transition-all duration-300 border border-purple-700/30 flex items-center justify-center gap-2"
+          >
             <Gift className="w-5 h-5" />
             Giveaways
           </button>
         </div>
 
         {/* Recent Activity */}
-        <div>
-          <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">Recent Activity</h2>
+        <div className="pb-20 md:pb-8">
+          <div className="flex items-center justify-between mb-6 sm:mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold">Recent Activity</h2>
+            <button 
+              onClick={() => navigate('/transactions')}
+              className="text-purple-400 hover:text-purple-300 text-sm sm:text-base transition-colors"
+            >
+              View All
+            </button>
+          </div>
           <div className="space-y-4">
             {transactions.map((transaction) => (
               <div
@@ -158,6 +148,6 @@ export default function Dashboard(): React.JSX.Element {
           </div>
         </div>
       </main>
-    </div>
+    </AppLayout>
   );
 }

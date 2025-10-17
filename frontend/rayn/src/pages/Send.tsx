@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { X, User } from 'lucide-react';
 import Logo from '../assets/Logo.png';
+import { useApp } from '../context/AppContext';
+import AppLayout from '../components/layout/AppLayout';
 
 const Send: React.FC = () => {
+  const navigate = useNavigate();
+  const { addTransaction, addNotification, setIsLoading, user } = useApp();
   const [recipient, setRecipient] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
   const [note, setNote] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const handleRecipientChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setRecipient(e.target.value);
@@ -19,21 +25,85 @@ const Send: React.FC = () => {
     setNote(e.target.value);
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-[#191022] via-[#231036] to-[#191022] text-white font-DMSans">
-      {/* Header */}
-      <header className="p-4 sm:p-6 md:p-8">
-        <div className="max-w-2xl mx-auto flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <img src={Logo} alt="Rayn logo" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
-            <span className="text-xl sm:text-2xl font-bold">Rayn</span>
-          </div>
+  const handleSend = async (e: React.FormEvent): Promise<void> => {
+    e.preventDefault();
+    setError('');
 
-          {/* Close Button */}
-          <button className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-800/50 hover:bg-gray-700/50 flex items-center justify-center transition-colors">
-            <X className="w-5 h-5 sm:w-6 sm:h-6" />
-          </button>
+    // Validation
+    if (!recipient.trim()) {
+      setError('Please enter a recipient');
+      return;
+    }
+
+    if (!amount || parseFloat(amount) <= 0) {
+      setError('Please enter a valid amount');
+      return;
+    }
+
+    const numAmount = parseFloat(amount);
+    if (user && numAmount > user.balance) {
+      setError('Insufficient balance');
+      return;
+    }
+
+    setIsLoading(true);
+
+    // Simulate transaction processing
+    setTimeout(() => {
+      // Add transaction to context
+      addTransaction({
+        amount: numAmount,
+        description: `Sent to ${recipient}`,
+        time: 'Just now',
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop',
+        type: 'sent',
+        recipient: recipient
+      });
+
+      // Show success notification
+      addNotification({
+        type: 'success',
+        title: 'Transaction Successful!',
+        message: `Sent $${numAmount.toFixed(2)} to ${recipient}`
+      });
+
+      setIsLoading(false);
+
+      // Navigate back to dashboard
+      navigate('/dashboard');
+    }, 1500);
+  };
+
+  return (
+    <AppLayout>
+      {/* Page Header */}
+      <header className="border-b border-purple-900/30 bg-[#1a0b2e]/50 backdrop-blur-sm sticky top-0 z-30">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Page Title */}
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => navigate('/dashboard')}
+                className="lg:hidden p-2 hover:bg-purple-900/30 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <div className="lg:hidden flex items-center gap-2">
+                <img src={Logo} alt="Rayn logo" className="w-8 h-8 object-contain" />
+                <span className="text-xl font-bold">Rayn</span>
+              </div>
+              <h1 className="hidden lg:block text-2xl font-bold text-white">Send Money</h1>
+            </div>
+            
+            {/* Close Button - Desktop */}
+            <button 
+              onClick={() => navigate('/dashboard')}
+              className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-purple-900/30 transition-colors"
+            >
+              <X className="w-5 h-5" />
+              <span>Close</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -48,7 +118,13 @@ const Send: React.FC = () => {
         </div>
 
         {/* Form */}
-        <div className="space-y-6 sm:space-y-8">
+        <form onSubmit={handleSend} className="space-y-6 sm:space-y-8">
+          {/* Error Message */}
+          {error && (
+            <div className="bg-red-900/40 border border-red-700/30 rounded-xl p-4 text-red-200 text-sm">
+              {error}
+            </div>
+          )}
           {/* To Field */}
           <div>
             <label className="block text-sm sm:text-base font-medium mb-3">To</label>
@@ -104,12 +180,15 @@ const Send: React.FC = () => {
           </div>
 
           {/* Send Button */}
-          <button className="w-full bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-semibold py-4 sm:py-5 px-6 rounded-xl sm:rounded-2xl text-base sm:text-lg md:text-xl transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-purple-500/30">
+          <button 
+            type="submit"
+            className="w-full bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-semibold py-4 sm:py-5 px-6 rounded-xl sm:rounded-2xl text-base sm:text-lg md:text-xl transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-purple-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             Send
           </button>
-        </div>
+        </form>
       </main>
-    </div>
+    </AppLayout>
   );
 };
 
