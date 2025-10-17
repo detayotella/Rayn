@@ -2,7 +2,7 @@ import { User, Gift, Shield } from 'lucide-react';
 
 export default function FeaturesSection() {
   return (
-    <section id="features" className="bg-[#191022] py-20">
+    <section id="features" className="bg-gradient-to-r from-purple-700/50 via-purple-600/50 to-purple-900/50 py-20">
       <div className="w-full px-2 sm:px-6 lg:px-10">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-4xl lg:text-5xl font-bold mb-4 text-white">Key Features</h2>

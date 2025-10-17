@@ -33,6 +33,11 @@ export const routes: RouteConfig[] = [
     name: "Profile",
     component: "Profile",
   },
+   {
+    path: "/chooseusername",
+    name: "ChooseUserName",
+    component: "ChooseUserName",
+  },
   {
     path: "/profile-summary",
     name: "ProfileSummary",

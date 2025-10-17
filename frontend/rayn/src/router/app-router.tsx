@@ -18,6 +18,7 @@ import Rewards from '../pages/Rewards';
 import Dashboard from "../pages/Dashboard";
 import Send from "../pages/Send";
 import Receive from "../pages/Receive";
+import ChooseUserName from '../pages/ChooseUserName';
 import CommunityGiveaway from "../pages/giveaway";
 import GiveawayDetails from "../pages/giveaway/giveawayDetails";
 import GiveawayStatus from '../pages/giveaway/giveawayStatus';
@@ -36,6 +37,7 @@ const componentMap = {
   ProfileSummary,
   Rewards,
   Dashboard,
+  ChooseUserName,
   Send,
   Receive,
   CommunityGiveaway,
