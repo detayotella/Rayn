@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { X, Link2, CheckCircle } from 'lucide-react';
 import Logo from '../assets/Logo.png';
+import { useApp } from '../context/AppContext';
+import AppLayout from '../components/layout/AppLayout';
 
 export default function Receive(): React.JSX.Element {
+    const navigate = useNavigate();
+    const { user, addNotification } = useApp();
     const [amount, setAmount] = useState<string>('');
     const [note, setNote] = useState<string>('');
-    const [showNotification, setShowNotification] = useState<boolean>(true);
+    const [showNotification, setShowNotification] = useState<boolean>(false);
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setAmount(e.target.value);
@@ -19,21 +24,55 @@ export default function Receive(): React.JSX.Element {
         setShowNotification(false);
     };
 
-    return (
-        <div className="min-h-screen bg-gradient-to-b from-[#191022] via-[#231036] to-[#191022] text-white">
-            {/* Header */}
-            <header className="p-4 sm:p-6 md:p-8">
-                <div className="max-w-4xl mx-auto flex items-center justify-between">
-                    {/* Logo */}
-                    <div className="flex items-center gap-2 sm:gap-3">
-                        <img src={Logo} alt="Rayn logo" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
-                        <span className="text-xl sm:text-2xl font-bold">Rayn</span>
-                    </div>
+    const handleShareLink = (): void => {
+        const paymentLink = `https://rayn.app/pay/${user?.username}?amount=${amount}&note=${encodeURIComponent(note)}`;
+        
+        // Copy to clipboard
+        navigator.clipboard.writeText(paymentLink).then(() => {
+            addNotification({
+                type: 'success',
+                title: 'Link Copied!',
+                message: 'Payment link copied to clipboard'
+            });
+        }).catch(() => {
+            addNotification({
+                type: 'error',
+                title: 'Copy Failed',
+                message: 'Could not copy link to clipboard'
+            });
+        });
+    };
 
-                    {/* Close Button */}
-                    <button className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-800/50 hover:bg-gray-700/50 flex items-center justify-center transition-colors">
-                        <X className="w-5 h-5 sm:w-6 sm:h-6" />
-                    </button>
+    return (
+        <AppLayout>
+            {/* Page Header */}
+            <header className="border-b border-purple-900/30 bg-[#1a0b2e]/50 backdrop-blur-sm sticky top-0 z-30">
+                <div className="px-4 sm:px-6 lg:px-8">
+                    <div className="flex items-center justify-between h-16">
+                        {/* Page Title */}
+                        <div className="flex items-center gap-3">
+                            <button 
+                                onClick={() => navigate('/dashboard')}
+                                className="lg:hidden p-2 hover:bg-purple-900/30 rounded-full transition-colors"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                            <div className="lg:hidden flex items-center gap-2">
+                                <img src={Logo} alt="Rayn logo" className="w-8 h-8 object-contain" />
+                                <span className="text-xl font-bold">Rayn</span>
+                            </div>
+                            <h1 className="hidden lg:block text-2xl font-bold text-white">Receive Money</h1>
+                        </div>
+                        
+                        {/* Close Button - Desktop */}
+                        <button 
+                            onClick={() => navigate('/dashboard')}
+                            className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-purple-900/30 transition-colors"
+                        >
+                            <X className="w-5 h-5" />
+                            <span>Close</span>
+                        </button>
+                    </div>
                 </div>
             </header>
 
@@ -115,7 +154,10 @@ export default function Receive(): React.JSX.Element {
                                 </div>
 
                                 {/* Share Link Button */}
-                                <button className="w-full bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-semibold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl text-base sm:text-lg transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-purple-500/30 flex items-center justify-center gap-2">
+                                <button 
+                                    onClick={handleShareLink}
+                                    className="w-full bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-semibold py-3 sm:py-4 px-6 rounded-xl sm:rounded-2xl text-base sm:text-lg transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-purple-500/30 flex items-center justify-center gap-2"
+                                >
                                     <Link2 className="w-5 h-5" />
                                     Share Link
                                 </button>
@@ -150,6 +192,6 @@ export default function Receive(): React.JSX.Element {
                     </div>
                 </div>
             </main>
-        </div>
+        </AppLayout>
     );
 }

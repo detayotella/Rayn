@@ -33,15 +33,11 @@ export const routes: RouteConfig[] = [
     name: "Profile",
     component: "Profile",
   },
-   {
-    path: "/chooseusername",
-    name: "ChooseUserName",
-    component: "ChooseUserName",
-  },
   {
     path: "/profile-summary",
     name: "ProfileSummary",
     component: "ProfileSummary",
+    isProtected: true,
   },
   {
     path: "/rewards",
@@ -68,13 +64,13 @@ export const routes: RouteConfig[] = [
     isProtected: true,
   },
   {
-    path: "/giveaways",
-    name: "Giveaways",
+    path: "/giveaway",
+    name: "Giveaway",
     component: "CommunityGiveaway",
     isProtected: true,
   },
   {
-    path: "/giveaway",
+    path: "/giveaway/:id",
     name: "GiveawayDetails",
     component: "GiveawayDetails",
     isProtected: true,
@@ -119,6 +115,18 @@ export const routes: RouteConfig[] = [
     path: "/redeem-reward",
     name: "RedeemReward",
     component: "RedeemReward",
+    isProtected: true,
+  },
+  {
+    path: "/feed",
+    name: "SocialFeed",
+    component: "SocialFeed",
+    isProtected: true,
+  },
+  {
+    path: "/giveaway/create",
+    name: "CreateGiveaway",
+    component: "CreateGiveaway",
     isProtected: true,
   },
 ];

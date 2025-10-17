@@ -20,7 +20,7 @@ export default function Onboarding(): React.JSX.Element {
         <p className="text-gray-300 text-base sm:text-lg md:text-xl mb-8 sm:mb-10 lg:mb-12 px-4 sm:px-6 leading-relaxed">
           Send, receive, and manage stablecoins effortlessly with our user-friendly app.
         </p>
-        <Link to={"/chooseusername"}><button className="w-full max-w-md bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white text-base sm:text-lg font-semibold py-3 sm:py-4 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 mx-auto">
+        <Link to={"/sign-up"}><button className="w-full max-w-md bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white text-base sm:text-lg font-semibold py-3 sm:py-4 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 mx-auto">
           Get Started
         </button></Link>
       </div>

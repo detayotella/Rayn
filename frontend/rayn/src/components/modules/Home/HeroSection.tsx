@@ -11,10 +11,10 @@ export default function HeroSection() {
               Send and receive stablecoins with ease
             </h1>
             <p className="text-gray-300 text-base sm:text-lg lg:w-3/4 leading-relaxed">
-              Rayn is a mobile-first Dapp that empowers African users to send, receive, and manage stablecoins seamlessly. Inspired by Pocket App's user-friendly P2P transfer model.
+              Rayn is a Dapp that empowers African users to send, receive, and manage stablecoins seamlessly. Inspired by Pocket App's user-friendly P2P transfer model.
             </p>
             <div className="flex flex-wrap justify-center gap-4 lg:justify-start">
-              <Link to="/onboarding">
+              <Link to="/sign-up">
                 <button className="bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-2xl font-medium transition text-white">
                   Get started
                 </button>
