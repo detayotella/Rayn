@@ -89,8 +89,8 @@ export default function ProfileSummary(): React.JSX.Element {
       {/* Header */}
       <header className="border-b border-gray-800/40 px-4 sm:px-6 py-4 sm:py-5">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <img src={Logo} alt="Rayn logo" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
+          <div className="flex items-center gap- sm:gap-">
+            <img src={Logo} alt="Rayn logo" className="w-8 h-8 sm:w-12 sm:h-12 object-contain" />
             <span className="text-xl sm:text-2xl font-semibold">Rayn</span>
           </div>
           <div className="flex items-center gap-3 sm:gap-4">

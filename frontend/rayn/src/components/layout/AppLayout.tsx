@@ -1,6 +1,6 @@
 import React from 'react';
-import Sidebar from '../navigation/Sidebar';
-import BottomNav from '../navigation/BottomNav';
+import Sidebar from '../modules/navigation/Sidebar';
+import BottomNav from '../modules/navigation/BottomNav';
 
 interface AppLayoutProps {
   children: React.ReactNode;

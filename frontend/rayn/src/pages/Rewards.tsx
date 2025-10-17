@@ -31,10 +31,13 @@ const Rewards: React.FC = () => {
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Mobile: Logo */}
-            <div className="lg:hidden flex items-center gap-2">
+            <button 
+              onClick={() => navigate('/')}
+              className="lg:hidden flex items-center gap-2 hover:opacity-80 transition-opacity"
+            >
               <img src={Logo} alt="Rayn logo" className="w-8 h-8 object-contain" />
               <span className="text-xl font-bold">Rayn</span>
-            </div>
+            </button>
             
             {/* Desktop: Page Title */}
             <h1 className="hidden lg:block text-2xl font-bold text-white">Rewards</h1>

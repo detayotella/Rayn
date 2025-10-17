@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import RaynMockup from '../../../assets/Rayn.png';
 
 export default function HeroSection() {
   return (
@@ -26,7 +27,7 @@ export default function HeroSection() {
           <div className="flex justify-center">
             <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-full">
               <img
-                src="/Rayn.png"
+                src={RaynMockup}
                 alt="Rayn stablecoin app mockup"
                 className="w-full h-auto rounded-3xl shadow-2xl shadow-purple-900/40"
               />

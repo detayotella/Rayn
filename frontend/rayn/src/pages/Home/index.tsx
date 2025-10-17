@@ -30,7 +30,9 @@ export default function Home() {
         mobileMenuOpen={mobileMenuOpen} 
         setMobileMenuOpen={setMobileMenuOpen} 
       />
-      <HeroSection />
+      {/* Add padding to prevent content from hiding behind fixed navbar */}
+      <div className="pt-20">
+        <HeroSection />
       <FeaturesSection />
       <TestimonialsSection testimonials={testimonials} />
       <CTASection />
@@ -40,6 +42,7 @@ export default function Home() {
         handleSubscribe={handleSubscribe}
       />
       <Footer />
+      </div>
     </div>
   );
 }

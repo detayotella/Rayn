@@ -88,10 +88,13 @@ const Send: React.FC = () => {
               >
                 <X className="w-5 h-5" />
               </button>
-              <div className="lg:hidden flex items-center gap-2">
+              <button 
+                onClick={() => navigate('/')}
+                className="lg:hidden flex items-center gap-2 hover:opacity-80 transition-opacity"
+              >
                 <img src={Logo} alt="Rayn logo" className="w-8 h-8 object-contain" />
                 <span className="text-xl font-bold">Rayn</span>
-              </div>
+              </button>
               <h1 className="hidden lg:block text-2xl font-bold text-white">Send Money</h1>
             </div>
             

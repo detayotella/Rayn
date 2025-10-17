@@ -21,7 +21,7 @@ import AppLayout from '../../components/layout/AppLayout';
 
 const featuredGiveaway = {
   id: 0,
-  title: '🎉 Mega Community Giveaway',
+  title: 'Mega Community Giveaway',
   description: 'Join our biggest giveaway yet and win big!',
   type: 'Public',
   typeVariant: 'public' as const,
@@ -165,10 +165,13 @@ const GiveawayPage: React.FC = () => {
               >
                 <ArrowLeft className="h-5 w-5" />
               </button>
-              <div className="lg:hidden flex items-center gap-2">
+              <button 
+                onClick={() => navigate('/')}
+                className="lg:hidden flex items-center gap-2 hover:opacity-80 transition-opacity"
+              >
                 <img src={Logo} alt="Rayn logo" className="w-8 h-8 object-contain" />
                 <span className="text-xl font-bold">Rayn</span>
-              </div>
+              </button>
               <h1 className="hidden lg:block text-2xl font-bold text-white">Community Giveaways</h1>
             </div>
             

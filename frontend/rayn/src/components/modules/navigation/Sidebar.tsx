@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router';
 import { Home, Send, ArrowDownToLine, Gift, Award, User, Settings, LogOut } from 'lucide-react';
-import Logo from '../../assets/Logo.png';
+import Logo from '../../../assets/Logo.png';
 
 const Sidebar: React.FC = () => {
   const navigate = useNavigate();
@@ -28,10 +28,13 @@ const Sidebar: React.FC = () => {
     <aside className="hidden lg:flex lg:flex-col lg:fixed lg:left-0 lg:top-0 lg:h-screen lg:w-64 bg-[#1a0b2e]/95 backdrop-blur-lg border-r border-purple-900/30 z-40">
       {/* Logo Section */}
       <div className="p-6 border-b border-purple-900/30">
-        <div className="flex items-center gap-3">
-          <img src={Logo} alt="Rayn logo" className="w-10 h-10 object-contain" />
-          <span className="text-2xl font-bold text-white">Rayn</span>
-        </div>
+        <button 
+          onClick={() => navigate('/')}
+          className="flex items-center gap- hover:opacity-80 transition-opacity"
+        >
+          <img src={Logo} alt="Rayn logo" className="w-12 h-12 object-contain" />
+          <span className="text-xl font-bold text-white">Rayn</span>
+        </button>
       </div>
 
       {/* Navigation Items */}

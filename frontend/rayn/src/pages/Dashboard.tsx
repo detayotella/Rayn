@@ -36,10 +36,13 @@ export default function Dashboard(): React.JSX.Element {
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Page Title - visible on mobile, hidden on desktop since sidebar shows logo */}
-            <div className="lg:hidden flex items-center gap-2">
+            <button 
+              onClick={() => navigate('/')}
+              className="lg:hidden flex items-center gap-2 hover:opacity-80 transition-opacity"
+            >
               <img src={Logo} alt="Rayn logo" className="w-8 h-8 object-contain" />
               <span className="text-xl font-bold">Rayn</span>
-            </div>
+            </button>
             
             <h1 className="hidden lg:block text-2xl font-bold text-white">Dashboard</h1>
 

@@ -27,8 +27,8 @@ export default function SignIn(): React.JSX.Element {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#191022] to-[#231036] flex flex-col">
       <header className="border-b border-gray-800/50 py-4 sm:py-5 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 sm:gap-3">
-          <img src={Logo} alt="Rayn logo" className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 object-contain" />
+        <div className="max-w-7xl mx-auto flex items-center justify-center gap- sm:gap-">
+          <img src={Logo} alt="Rayn logo" className="w-8 h-8 sm:w-7 sm:h-7 md:w-12 md:h-12 object-contain" />
           <span className="text-xl sm:text-2xl md:text-3xl font-bold text-white">Rayn</span>
         </div>
       </header>

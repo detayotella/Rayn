@@ -9,11 +9,11 @@ interface NavigationProps {
 
 export default function Navigation({ mobileMenuOpen, setMobileMenuOpen }: NavigationProps) {
   return (
-    <nav className="bg-[#191022] py-4">
+    <nav className="fixed top-0 left-0 right-0 bg-[#191022]/95 backdrop-blur-3xl border-b border-purple-900/30 py-4 z-50">
       <div className="w-full px-2 sm:px-6 flex items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center gap-2">
-          <img src={Logo} alt="Rayn logo" className="w-8 h-8 object-contain" />
+        <div className="flex items-center gap-">
+          <img src={Logo} alt="Rayn logo" className="w-12 h-12 object-contain" />
           <span className="text-xl font-bold text-white">Rayn</span>
         </div>
 
