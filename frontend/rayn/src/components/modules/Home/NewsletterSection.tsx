@@ -21,11 +21,11 @@ export default function NewsletterSection({ email, handleEmailChange, handleSubs
               value={email}
               onChange={handleEmailChange}
               placeholder="Enter your email address"
-              className="flex-1 px-4 py-3 rounded-full bg-[#191022] border border-purple-700/30 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
+              className="flex-1 px-4 py-3 rounded-2xl bg-[#191022] border border-purple-700/30 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
             />
             <button
               onClick={handleSubscribe}
-              className="bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-full font-medium transition text-white whitespace-nowrap"
+              className="bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-2xl font-medium transition text-white whitespace-nowrap"
             >
               Subscribe
             </button>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { FiTwitter, FiInstagram, FiFacebook } from 'react-icons/fi';
+import Logo from '../../assets/Logo.png';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -9,12 +10,12 @@ const Footer: React.FC = () => {
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#8854F6] to-[#5F2EEA]">
-              <span className="text-xl font-bold text-white">R</span>
-            </div>
-            <div>
-              <p className="text-sm text-white/60">© {currentYear} Rayn. All rights reserved.</p>
-            </div>
+            <img
+              src={Logo}
+              alt="Rayn logo"
+              className="h-10 w-10 object-contain"
+            />
+            <p className="text-sm text-white/60">© {currentYear} Rayn. All rights reserved.</p>
           </div>
 
           <nav className="flex flex-wrap items-center gap-6 text-sm text-white/60">

@@ -15,8 +15,8 @@ export default function HeroSection() {
             </p>
             <div className="flex flex-wrap justify-center gap-4 lg:justify-start">
               <Link to="/onboarding">
-                <button className="bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-full font-medium transition text-white">
-                  Download App
+                <button className="bg-purple-600 hover:bg-purple-700 px-8 py-3 rounded-2xl font-medium transition text-white">
+                  Get started
                 </button>
               </Link>
             </div>

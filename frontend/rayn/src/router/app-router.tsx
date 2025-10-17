@@ -11,7 +11,9 @@ import ProtectedRoute from './protectedRoutes';
 // Import all page components
 import Home from '../pages/Home';
 import Onboarding from '../pages/Onboarding';
-import ChooseUsernamePage from '../pages/ChooseUserName';
+import SignIn from '../pages/Login/SignIn';
+import Profile from '../pages/Profile/Profile';
+import ProfileSummary from '../pages/Profile/ProfileSummary';
 import Rewards from '../pages/Rewards';
 import Dashboard from "../pages/Dashboard";
 import Send from "../pages/Send";
@@ -22,11 +24,16 @@ import GiveawayStatus from '../pages/giveaway/giveawayStatus';
 import WithdrawGiveaway from '../pages/giveaway/withdraw';
 import AnalyticsGiveaway from '../pages/giveaway/analytics';
 import ShareGiveaway from '../pages/giveaway/share';
+import Referrals from '../pages/Referrals';
+import Referred from '../pages/Referrals/Referred';
+import SignUp from '../pages/Login/SignUp';
+import RedeemReward from '../pages/Referrals/redeemReward';
 // Component mapping
 const componentMap = {
   Home,
   Onboarding,
-  ChooseUsernamePage,
+  Profile,
+  ProfileSummary,
   Rewards,
   Dashboard,
   Send,
@@ -36,7 +43,12 @@ const componentMap = {
   GiveawayStatus,
   WithdrawGiveaway,
   AnalyticsGiveaway,
-  ShareGiveaway
+  ShareGiveaway,
+  Referrals,
+  Referred,
+  SignUp,
+  SignIn,
+  RedeemReward,
 } as const;
 
 // Create router configuration

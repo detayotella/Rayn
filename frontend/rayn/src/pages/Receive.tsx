@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Link2, CheckCircle } from 'lucide-react';
+import Logo from '../assets/Logo.png';
 
 export default function Receive(): React.JSX.Element {
     const [amount, setAmount] = useState<string>('');
@@ -25,9 +26,7 @@ export default function Receive(): React.JSX.Element {
                 <div className="max-w-4xl mx-auto flex items-center justify-between">
                     {/* Logo */}
                     <div className="flex items-center gap-2 sm:gap-3">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-950 to-purple-900 rounded-lg flex items-center justify-center transform rotate-45">
-                            <div className="w-5 h-5 sm:w-6 sm:h-6 bg-white rounded transform -rotate-45"></div>
-                        </div>
+                        <img src={Logo} alt="Rayn logo" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
                         <span className="text-xl sm:text-2xl font-bold">Rayn</span>
                     </div>
 

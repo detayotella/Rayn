@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Copy, X, MessageCircle, Send } from 'lucide-react';
+import Logo from '../../assets/Logo.png';
 
 const shareLink = 'rayn.app/g/Y4tD2x';
 const giveawayPin = '1984';
@@ -22,9 +23,7 @@ const ShareGiveaway: React.FC = () => {
       <div className="w-full max-w-3xl rounded-[32px] border border-purple-900/30 bg-[#160829] shadow-[0_20px_60px_rgba(72,25,129,0.35)] overflow-hidden">
         <header className="flex items-center justify-between px-6 sm:px-8 py-6 border-b border-purple-900/30">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-purple-300 flex items-center justify-center">
-              <div className="w-5 h-5 rounded-full bg-[#1b0d2e]" />
-            </div>
+            <img src={Logo} alt="Rayn logo" className="w-10 h-10 object-contain" />
             <span className="text-xl font-semibold">Rayn</span>
           </div>
           <button className="rounded-full p-2 hover:bg-purple-900/40 transition-colors">

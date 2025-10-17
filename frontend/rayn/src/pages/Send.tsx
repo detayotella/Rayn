@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, User } from 'lucide-react';
+import Logo from '../assets/Logo.png';
 
 const Send: React.FC = () => {
   const [recipient, setRecipient] = useState<string>('');
@@ -25,11 +26,7 @@ const Send: React.FC = () => {
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center">
-              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M13 10h5l-6 8v-6H7l6-8v6z"/>
-              </svg>
-            </div>
+            <img src={Logo} alt="Rayn logo" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" />
             <span className="text-xl sm:text-2xl font-bold">Rayn</span>
           </div>
 

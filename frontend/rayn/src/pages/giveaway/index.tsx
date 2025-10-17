@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import {
   ArrowLeft,
   Bell,
@@ -13,6 +13,7 @@ import referralIllustration from '../../assets/referral.jpg';
 import avatarImage from '../../assets/avatar1.jpg';
 import Navigation from '../../components/modules/Home/Navigation';
 import { useState } from 'react';
+import Logo from '../../assets/Logo.png';
 
 const activeGiveaways = [
   {
@@ -71,25 +72,28 @@ const typeIcons = {
 
 const GiveawayPage: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-[#0f051c] text-white font-DMSans">
       <header className="border-b border-purple-900/30 bg-[#160728]/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 sm:h-20 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-0">
+        <div className="mx-10 flex h-16 sm:h-20  items-center justify-between px-4 sm:px-6 lg:px-0">
           <div className="flex items-center gap-3 sm:gap-4">
-            <Link
-              to="/dashboard"
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
               className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-600 transition hover:bg-purple-700"
             >
               <ArrowLeft className="h-5 w-5" />
-            </Link>
+            </button>
+            <img src={Logo} alt="Rayn logo" className="h-10 w-10 object-contain" />
             <span className="text-xl sm:text-2xl font-semibold">Rayn</span>
           </div>
 
-          <Navigation 
+          {/* <Navigation 
                   mobileMenuOpen={mobileMenuOpen} 
                   setMobileMenuOpen={setMobileMenuOpen} 
-                />
+                /> */}
           <div className="flex items-center gap-3 sm:gap-4">
             <button className="rounded-full p-2 transition hover:bg-purple-900/40">
               <Bell className="h-5 w-5" />

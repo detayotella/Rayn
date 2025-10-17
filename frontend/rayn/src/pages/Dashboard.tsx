@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 import { Bell, Gift, ArrowUp, ArrowDown } from 'lucide-react';
+import Logo from '../assets/Logo.png';
 
 interface Transaction {
   id: number;
@@ -9,7 +11,24 @@ interface Transaction {
   avatar: string;
 }
 
-export default function Dashboard(): JSX.Element {
+export default function Dashboard(): React.JSX.Element {
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const location = useLocation();
+  const locationState = (location.state as { profileImage?: string | null } | null) ?? undefined;
+
+  useEffect(() => {
+    const stateProfileImage = locationState?.profileImage;
+
+    if (stateProfileImage) {
+      setProfileImage(stateProfileImage);
+      sessionStorage.setItem('raynProfileImage', stateProfileImage);
+      return;
+    }
+
+    const storedProfileImage = sessionStorage.getItem('raynProfileImage');
+    setProfileImage(storedProfileImage ?? null);
+  }, [locationState]);
+
   const transactions: Transaction[] = [
     {
       id: 1,
@@ -45,13 +64,11 @@ export default function Dashboard(): JSX.Element {
     <div className="min-h-screen bg-gradient-to-b from-[#191022] via-[#231036] to-[#191022] text-white">
       {/* Header */}
       <header className="border-b border-purple-900/30 bg-[#1a0b2e]/80 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-2 px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
             {/* Logo */}
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg flex items-center justify-center transform rotate-45">
-                <div className="w-4 h-4 sm:w-5 sm:h-5 bg-white rounded transform -rotate-45"></div>
-              </div>
+              <img src={Logo} alt="Rayn logo" className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
               <span className="text-xl sm:text-2xl font-bold">Rayn</span>
             </div>
 
@@ -68,11 +85,19 @@ export default function Dashboard(): JSX.Element {
                 <Bell className="w-5 h-5 sm:w-6 sm:h-6" />
               </button>
               <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" 
-                  alt="Profile" 
-                  className="w-full h-full object-cover"
-                />
+                {profileImage ? (
+                  <img
+                    src={profileImage}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <img
+                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop"
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                )}
               </div>
             </div>
           </div>

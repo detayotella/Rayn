@@ -19,9 +19,24 @@ export const routes: RouteConfig[] = [
     component: "Onboarding",
   },
   {
-    path: "/choose-username",
-    name: "ChooseUsername",
-    component: "ChooseUsernamePage",
+    path: "/sign-in",
+    name: "SignIn",
+    component: "SignIn",
+  },
+  {
+    path: "/sign-up",
+    name: "SignUp",
+    component: "SignUp",
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: "Profile",
+  },
+  {
+    path: "/profile-summary",
+    name: "ProfileSummary",
+    component: "ProfileSummary",
   },
   {
     path: "/rewards",
@@ -81,6 +96,24 @@ export const routes: RouteConfig[] = [
     path: "/share",
     name: "ShareGiveaway",
     component: "ShareGiveaway",
+    isProtected: true,
+  },
+  {
+    path: "/referrals",
+    name: "Referrals",
+    component: "Referrals",
+    isProtected: true,
+  },
+  {
+    path: "/referred",
+    name: "Referred",
+    component: "Referred",
+    isProtected: true,
+  },
+  {
+    path: "/redeem-reward",
+    name: "RedeemReward",
+    component: "RedeemReward",
     isProtected: true,
   },
 ];

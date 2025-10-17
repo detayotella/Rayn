@@ -9,6 +9,7 @@ import {
   Power,
   Megaphone,
 } from 'lucide-react';
+import { useNavigate } from 'react-router';
 
 type ParticipantStatus = 'claimed' | 'not_claimed';
 
@@ -33,6 +34,7 @@ const giveawayPin = '123456';
 
 const GiveawayStatus: React.FC = () => {
   const [copiedField, setCopiedField] = useState<'link' | 'pin' | null>(null);
+  const navigate = useNavigate();
 
   const handleCopy = async (value: string, field: 'link' | 'pin') => {
     try {
@@ -56,7 +58,11 @@ const GiveawayStatus: React.FC = () => {
       <header className="border-b border-purple-900/30 bg-[#130625]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <button className="w-10 h-10 rounded-full bg-purple-600/70 hover:bg-purple-600 transition-colors flex items-center justify-center">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="w-10 h-10 rounded-full bg-purple-600/70 hover:bg-purple-600 transition-colors flex items-center justify-center"
+            >
               <ArrowLeft className="w-5 h-5" />
             </button>
             <span className="text-2xl font-semibold">Rayn</span>
