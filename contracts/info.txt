@@ -1,0 +1,130 @@
+
+Checking deployer balance...
+Balance: 0.028423076875565644 ETH
+
+Starting deployment...
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[⠆] Compiling...
+No files changed, compilation skipped
+Script ran successfully.
+
+== Logs ==
+  
+========================================
+  RAYN PROTOCOL DEPLOYMENT
+  ========================================
+  Deployer Address: 0xb3e6B58E59651932488A33AcB429c68317989944
+  Chain ID: 4202
+  ========================================
+
+  1/3 Deploying RaynStable...
+     [OK] RaynStable deployed at: 0xDcf050285a799389dE82B02bf9283246dD781f13
+  
+2/3 Deploying UsernameRegistry...
+     [OK] UsernameRegistry deployed at: 0x6610d9AF8DA15b62edeC19E2E4faEb378A564CC0
+  
+3/4 Deploying GiveawayDistributor...
+     [OK] GiveawayDistributor deployed at: 0x3b6e2Cf8E4b4b27188BccA88FfcC5B505742a803
+  
+4/4 Deploying RaynPaymentRouter...
+     [OK] RaynPaymentRouter deployed at: 0xad3F6c7d78abD646104259c527C6092C3f8Dd52C
+  
+========================================
+  DEPLOYMENT SUCCESSFUL!
+  ========================================
+  
+Contract Addresses:
+  -------------------
+  RaynStable:           0xDcf050285a799389dE82B02bf9283246dD781f13
+  UsernameRegistry:     0x6610d9AF8DA15b62edeC19E2E4faEb378A564CC0
+  GiveawayDistributor:  0x3b6e2Cf8E4b4b27188BccA88FfcC5B505742a803
+  RaynPaymentRouter:    0xad3F6c7d78abD646104259c527C6092C3f8Dd52C
+  
+Contract Owners:
+  ----------------
+  All contracts owned by: 0xb3e6B58E59651932488A33AcB429c68317989944
+  
+========================================
+  FRONTEND INTEGRATION
+  ========================================
+  Add these to your frontend .env file:
+
+  VITE_RAYN_STABLE_ADDRESS=0xDcf050285a799389dE82B02bf9283246dD781f13
+  VITE_USERNAME_REGISTRY_ADDRESS=0x6610d9AF8DA15b62edeC19E2E4faEb378A564CC0
+  VITE_GIVEAWAY_DISTRIBUTOR_ADDRESS=0x3b6e2Cf8E4b4b27188BccA88FfcC5B505742a803
+  VITE_PAYMENT_ROUTER_ADDRESS=0xad3F6c7d78abD646104259c527C6092C3f8Dd52C
+  
+========================================
+  NEXT STEPS
+  ========================================
+  1. Save the contract addresses above
+  2. Update your frontend .env file
+  3. Verify contracts on block explorer (if not auto-verified)
+  4. Test each contract's functionality
+  5. For testnet: Mint test tokens using RaynStable.mint()
+  
+WARNING: RaynStable is for TESTING only!
+     Use real stablecoins (USDC/USDT/DAI) in production
+  ========================================
+
+
+## Setting up 1 EVM.
+
+==========================
+
+Chain 4202
+
+Estimated gas price: 0.001000506 gwei
+
+Estimated total gas used for script: 11188245
+
+Estimated amount required: 0.00001119390625197 ETH
+
+==========================
+
+##### 4202
+✅  [Success] Hash: 0x64e1102b88e0fad23785883243ceacb46cc5c51556264f78505ddca4c0e1b652
+Contract Address: 0xad3F6c7d78abD646104259c527C6092C3f8Dd52C
+Block: 27720281
+Paid: 0.000003092060093334 ETH (3091278 gas * 0.001000253 gwei)
+
+
+##### 4202
+✅  [Success] Hash: 0x1129e9675778fd2d92a52bca14dc117c9571bac4081b4229c9b11002c54b8f40
+Contract Address: 0x6610d9AF8DA15b62edeC19E2E4faEb378A564CC0
+Block: 27720281
+Paid: 0.000001576237687267 ETH (1575839 gas * 0.001000253 gwei)
+
+
+##### 4202
+✅  [Success] Hash: 0xd74cef7223d8d3eaec132e7134e7493e544c64377fa6a0319a98110644d6df80
+Contract Address: 0xDcf050285a799389dE82B02bf9283246dD781f13
+Block: 27720281
+Paid: 0.000001244180698098 ETH (1243866 gas * 0.001000253 gwei)
+
+
+##### 4202
+✅  [Success] Hash: 0xc48e78552d72f186398ebf44928dbe485d347bbd6b04a384f6ec02ba01d3fb1c
+Contract Address: 0x3b6e2Cf8E4b4b27188BccA88FfcC5B505742a803
+Block: 27720281
+Paid: 0.000002696042926333 ETH (2695361 gas * 0.001000253 gwei)
+
+✅ Sequence #1 on 4202 | Total Paid: 0.000008608521405032 ETH (8606344 gas * avg 0.001000253 gwei)
+                                                                                                            
+
+==========================
+
+ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+
+Transactions saved to: /home/caleb/web3bridge/Rayn/contracts/broadcast/DeployAll.s.sol/4202/run-latest.json
+
+Sensitive values saved to: /home/caleb/web3bridge/Rayn/contracts/cache/DeployAll.s.sol/4202/run-latest.json
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Deployment successful!
+
+Next steps:
+  1. Check broadcast/ folder for deployment receipts
+  2. Copy contract addresses to your frontend .env
+  3. Verify contracts on block explorer (if not auto-verified)
+  4. Test the deployed contracts
