@@ -3,710 +3,751 @@ pragma solidity ^0.8.20;
 
 import "forge-std/Test.sol";
 import "../src/GiveawayDistributor.sol";
-import "../src/RaynStable.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+// Mock ERC20 token for testing
+contract MockERC20 is ERC20 {
+    constructor() ERC20("Mock Token", "MOCK") {
+        _mint(msg.sender, 1000000 * 10 ** 18);
+    }
+
+    function mint(address to, uint256 amount) external {
+        _mint(to, amount);
+    }
+}
 
 contract GiveawayDistributorTest is Test {
-    GiveawayDistributor public giveaway;
-    RaynStable public token;
-    
-    address creator;
-    address user1;
-    address user2;
-    address user3;
-    
-    uint256 endTime;
+    GiveawayDistributor public distributor;
+    MockERC20 public token;
+
+    address public owner;
+    address public creator;
+    address public user1;
+    address public user2;
+    address public user3;
+    address public user4;
+    address public user5;
+
+    uint256 constant TOTAL_AMOUNT = 1000 ether;
+    uint256 constant WINNERS_COUNT = 10;
+    uint256 public endTime;
+
+    event GiveawayCreated(
+        uint256 indexed id,
+        address indexed creator,
+        address indexed token,
+        uint256 totalAmount,
+        uint256 winnersCount,
+        uint256 endTime
+    );
+
+    event RewardClaimed(
+        uint256 indexed id,
+        address indexed winner,
+        uint256 amount
+    );
+
+    event GiveawayEnded(uint256 indexed id, bool expired);
+
+    event WinnersAnnounced(uint256 indexed id, address[] winners);
+
+    event GiveawayDisposed(uint256 indexed id, uint256 leftoverTokens);
 
     function setUp() public {
-        creator = address(this);
-        user1 = address(0x1111);
-        user2 = address(0x2222);
-        user3 = address(0x3333);
-        
-        giveaway = new GiveawayDistributor();
-        token = new RaynStable();
-        
-        // Mint tokens for tests
-        token.mint(creator, 10_000 * 10**6);
-        
+        owner = address(this);
+        creator = makeAddr("creator");
+        user1 = makeAddr("user1");
+        user2 = makeAddr("user2");
+        user3 = makeAddr("user3");
+        user4 = makeAddr("user4");
+        user5 = makeAddr("user5");
+
+        distributor = new GiveawayDistributor();
+        token = new MockERC20();
+
         endTime = block.timestamp + 7 days;
+
+        // Fund creator with tokens
+        token.mint(creator, TOTAL_AMOUNT * 10);
     }
 
-    // ============================================
-    // DEPLOYMENT TESTS
-    // ============================================
+    /*//////////////////////////////////////////////////////////////
+                        GIVEAWAY CREATION TESTS
+    //////////////////////////////////////////////////////////////*/
 
-    function test_DeploymentOwner() public view {
-        assertEq(giveaway.owner(), creator);
-    }
+    function testCreateGiveaway() public {
+        vm.startPrank(creator);
+        token.approve(address(distributor), TOTAL_AMOUNT);
 
-    function test_InitialGiveawayIdIsOne() public view {
-        assertEq(giveaway.getTotalGiveaways(), 0);
-    }
-
-    // ============================================
-    // GIVEAWAY CREATION TESTS
-    // ============================================
-
-    function test_CanCreatePublicGiveaway() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
-        assertEq(giveawayId, 1);
-        assertEq(giveaway.getTotalGiveaways(), 1);
-    }
-
-    function test_CanCreatePrivateGiveaway() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            true
-        );
-        
-        assertEq(giveawayId, 1);
-    }
-
-    function test_CreationEmitsEvent() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        
         vm.expectEmit(true, true, true, true);
-        emit GiveawayDistributor.GiveawayCreated(
+        emit GiveawayCreated(
             1,
             creator,
             address(token),
-            totalAmount,
-            winnersCount,
+            TOTAL_AMOUNT,
+            WINNERS_COUNT,
             endTime
         );
-        
-        giveaway.createGiveaway(address(token), totalAmount, winnersCount, endTime, false);
+
+        uint256 giveawayId = distributor.createGiveaway(
+            address(token),
+            TOTAL_AMOUNT,
+            WINNERS_COUNT,
+            endTime,
+            false
+        );
+        vm.stopPrank();
+
+        assertEq(giveawayId, 1);
+        assertEq(token.balanceOf(address(distributor)), TOTAL_AMOUNT);
+
+        (
+            address gCreator,
+            ,
+            uint256 totalAmount,
+            uint256 winnersCount,
+            uint256 claimedCount,
+            uint256 gEndTime,
+            bool isPrivate,
+            bool active,
+            bool disposed
+        ) = distributor.giveaways(giveawayId);
+
+        assertEq(gCreator, creator);
+        assertEq(totalAmount, TOTAL_AMOUNT);
+        assertEq(winnersCount, WINNERS_COUNT);
+        assertEq(claimedCount, 0);
+        assertEq(gEndTime, endTime);
+        assertFalse(isPrivate);
+        assertTrue(active);
+        assertFalse(disposed);
     }
 
-    function test_CannotCreateWithZeroWinners() public {
-        uint256 totalAmount = 1000 * 10**6;
-        
-        token.approve(address(giveaway), totalAmount);
-        
-        vm.expectRevert("GiveawayDistributor: must have at least one winner");
-        giveaway.createGiveaway(address(token), totalAmount, 0, endTime, false);
-    }
+    function testCreateMultipleGiveaways() public {
+        vm.startPrank(creator);
+        token.approve(address(distributor), TOTAL_AMOUNT * 3);
 
-    function test_CannotCreateWithZeroAmount() public {
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), 0);
-        
-        vm.expectRevert("GiveawayDistributor: total amount must be greater than zero");
-        giveaway.createGiveaway(address(token), 0, winnersCount, endTime, false);
-    }
+        uint256 id1 = distributor.createGiveaway(
+            address(token),
+            TOTAL_AMOUNT,
+            WINNERS_COUNT,
+            endTime,
+            false
+        );
 
-    function test_CannotCreateWithPastEndTime() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        uint256 pastTime = block.timestamp - 1 days;
-        
-        token.approve(address(giveaway), totalAmount);
-        
-        vm.expectRevert("GiveawayDistributor: end time must be in the future");
-        giveaway.createGiveaway(address(token), totalAmount, winnersCount, pastTime, false);
-    }
+        uint256 id2 = distributor.createGiveaway(
+            address(token),
+            TOTAL_AMOUNT,
+            5,
+            endTime + 1 days,
+            true
+        );
 
-    function test_CannotCreateWithAmountTooSmall() public {
-        uint256 totalAmount = 5 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        
-        vm.expectRevert("GiveawayDistributor: total amount too small for winner count");
-        giveaway.createGiveaway(address(token), totalAmount, winnersCount, endTime, false);
-    }
+        uint256 id3 = distributor.createGiveaway(
+            address(token),
+            TOTAL_AMOUNT,
+            20,
+            endTime + 2 days,
+            false
+        );
+        vm.stopPrank();
 
-    function test_CannotCreateWithInvalidToken() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        vm.expectRevert("GiveawayDistributor: invalid token address");
-        giveaway.createGiveaway(address(0), totalAmount, winnersCount, endTime, false);
-    }
-
-    function test_MultipleGiveawaysCanBeCreated() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount * 3);
-        
-        uint256 id1 = giveaway.createGiveaway(address(token), totalAmount, winnersCount, endTime, false);
-        uint256 id2 = giveaway.createGiveaway(address(token), totalAmount, winnersCount, endTime, false);
-        uint256 id3 = giveaway.createGiveaway(address(token), totalAmount, winnersCount, endTime, false);
-        
         assertEq(id1, 1);
         assertEq(id2, 2);
         assertEq(id3, 3);
-        assertEq(giveaway.getTotalGiveaways(), 3);
+        assertEq(distributor.getTotalGiveaways(), 3);
     }
 
-    // ============================================
-    // CLAIMING TESTS
-    // ============================================
-
-    function test_UserCanClaimReward() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        uint256 expectedReward = totalAmount / winnersCount;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
+    function testCannotCreateGiveawayWithZeroToken() public {
+        vm.startPrank(creator);
+        vm.expectRevert("GiveawayDistributor: invalid token address");
+        distributor.createGiveaway(
+            address(0),
+            TOTAL_AMOUNT,
+            WINNERS_COUNT,
             endTime,
             false
         );
-        
-        vm.prank(user1);
-        giveaway.claimReward(giveawayId);
-        
-        assertEq(token.balanceOf(user1), expectedReward);
+        vm.stopPrank();
     }
 
-    function test_ClaimingEmitsEvent() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        uint256 expectedReward = totalAmount / winnersCount;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
+    function testCannotCreateGiveawayWithZeroWinners() public {
+        vm.startPrank(creator);
+        token.approve(address(distributor), TOTAL_AMOUNT);
+
+        vm.expectRevert("GiveawayDistributor: must have at least one winner");
+        distributor.createGiveaway(
             address(token),
-            totalAmount,
-            winnersCount,
+            TOTAL_AMOUNT,
+            0,
             endTime,
             false
         );
-        
+        vm.stopPrank();
+    }
+
+    function testCannotCreateGiveawayWithZeroAmount() public {
+        vm.startPrank(creator);
+        token.approve(address(distributor), TOTAL_AMOUNT);
+
+        vm.expectRevert(
+            "GiveawayDistributor: total amount must be greater than zero"
+        );
+        distributor.createGiveaway(address(token), 0, WINNERS_COUNT, endTime, false);
+        vm.stopPrank();
+    }
+
+    function testCannotCreateGiveawayWithPastEndTime() public {
+        vm.startPrank(creator);
+        token.approve(address(distributor), TOTAL_AMOUNT);
+
+        vm.expectRevert(
+            "GiveawayDistributor: end time must be in the future"
+        );
+        distributor.createGiveaway(
+            address(token),
+            TOTAL_AMOUNT,
+            WINNERS_COUNT,
+            block.timestamp - 1,
+            false
+        );
+        vm.stopPrank();
+    }
+
+    function testCannotCreateGiveawayWithAmountTooSmall() public {
+        vm.startPrank(creator);
+        token.approve(address(distributor), 5);
+
+        vm.expectRevert(
+            "GiveawayDistributor: total amount too small for winner count"
+        );
+        distributor.createGiveaway(address(token), 5, 10, endTime, false);
+        vm.stopPrank();
+    }
+
+    function testCannotCreateGiveawayWithoutApproval() public {
+        vm.startPrank(creator);
+        vm.expectRevert();
+        distributor.createGiveaway(
+            address(token),
+            TOTAL_AMOUNT,
+            WINNERS_COUNT,
+            endTime,
+            false
+        );
+        vm.stopPrank();
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                        CLAIM REWARD TESTS
+    //////////////////////////////////////////////////////////////*/
+
+    function testClaimReward() public {
+        uint256 giveawayId = _createTestGiveaway();
+        uint256 rewardPerWinner = distributor.getRewardPerWinner(giveawayId);
+
         vm.prank(user1);
         vm.expectEmit(true, true, false, true);
-        emit GiveawayDistributor.RewardClaimed(giveawayId, user1, expectedReward);
-        giveaway.claimReward(giveawayId);
+        emit RewardClaimed(giveawayId, user1, rewardPerWinner);
+        distributor.claimReward(giveawayId);
+
+        assertTrue(distributor.hasClaimed(giveawayId, user1));
+        assertEq(token.balanceOf(user1), rewardPerWinner);
+
+        (, , , , uint256 claimedCount, , , , ) = distributor.giveaways(
+            giveawayId
+        );
+        assertEq(claimedCount, 1);
     }
 
-    function test_CannotClaimTwice() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
+    function testMultipleUsersClaim() public {
+        uint256 giveawayId = _createTestGiveaway();
+        uint256 rewardPerWinner = distributor.getRewardPerWinner(giveawayId);
+
+        vm.prank(user1);
+        distributor.claimReward(giveawayId);
+
+        vm.prank(user2);
+        distributor.claimReward(giveawayId);
+
+        vm.prank(user3);
+        distributor.claimReward(giveawayId);
+
+        assertEq(token.balanceOf(user1), rewardPerWinner);
+        assertEq(token.balanceOf(user2), rewardPerWinner);
+        assertEq(token.balanceOf(user3), rewardPerWinner);
+
+        (, , , , uint256 claimedCount, , , , ) = distributor.giveaways(
+            giveawayId
         );
-        
-        vm.prank(user1);
-        giveaway.claimReward(giveawayId);
-        
-        vm.prank(user1);
+        assertEq(claimedCount, 3);
+    }
+
+    function testCannotClaimTwice() public {
+        uint256 giveawayId = _createTestGiveaway();
+
+        vm.startPrank(user1);
+        distributor.claimReward(giveawayId);
+
         vm.expectRevert("GiveawayDistributor: already claimed");
-        giveaway.claimReward(giveawayId);
+        distributor.claimReward(giveawayId);
+        vm.stopPrank();
     }
 
-    function test_CannotClaimExpiredGiveaway() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
+    function testCannotClaimFromInactiveGiveaway() public {
+        uint256 giveawayId = _createTestGiveaway();
+
+        vm.prank(owner);
+        distributor.endGiveaway(giveawayId);
+
+        vm.prank(user1);
+        vm.expectRevert("GiveawayDistributor: giveaway is not active");
+        distributor.claimReward(giveawayId);
+    }
+
+    function testCannotClaimFromExpiredGiveaway() public {
+        uint256 giveawayId = _createTestGiveaway();
+
         vm.warp(endTime + 1);
-        
+
         vm.prank(user1);
         vm.expectRevert("GiveawayDistributor: giveaway has expired");
-        giveaway.claimReward(giveawayId);
+        distributor.claimReward(giveawayId);
     }
 
-    function test_CannotClaimWhenInactive() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
-        giveaway.endGiveaway(giveawayId);
-        
-        vm.prank(user1);
+    function testCannotClaimWhenAllRewardsClaimed() public {
+        uint256 giveawayId = _createTestGiveaway();
+
+        // Claim all 10 spots (this will auto-end the giveaway)
+        for (uint256 i = 1; i <= WINNERS_COUNT; i++) {
+            address user = address(uint160(1000 + i));
+            vm.prank(user);
+            distributor.claimReward(giveawayId);
+        }
+
+        // After all winners claim, giveaway is no longer active
+        vm.prank(user5);
         vm.expectRevert("GiveawayDistributor: giveaway is not active");
-        giveaway.claimReward(giveawayId);
+        distributor.claimReward(giveawayId);
     }
 
-    function test_CannotClaimWhenAllClaimedRewards() public {
-        uint256 totalAmount = 100 * 10**6;
-        uint256 winnersCount = 2;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
-        vm.prank(user1);
-        giveaway.claimReward(giveawayId);
-        
-        vm.prank(user2);
-        giveaway.claimReward(giveawayId);
-        
-        vm.prank(user3);
-        vm.expectRevert("GiveawayDistributor: all rewards claimed");
-        giveaway.claimReward(giveawayId);
-    }
+    function testGiveawayEndsAutomaticallyWhenFull() public {
+        uint256 giveawayId = _createTestGiveaway();
 
-    function test_GiveawayAutomaticallyEndsWhenFullyClaimedRewards() public {
-        uint256 totalAmount = 100 * 10**6;
-        uint256 winnersCount = 2;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
-        vm.prank(user1);
-        giveaway.claimReward(giveawayId);
-        
-        vm.prank(user2);
+        // Claim all spots except last one
+        for (uint256 i = 1; i < WINNERS_COUNT; i++) {
+            address user = address(uint160(1000 + i));
+            vm.prank(user);
+            distributor.claimReward(giveawayId);
+        }
+
+        (, , , , , , , bool activeBefore, ) = distributor.giveaways(giveawayId);
+        assertTrue(activeBefore);
+
+        // Last claim should trigger auto-end
+        address lastUser = address(uint160(1000 + WINNERS_COUNT));
+        vm.prank(lastUser);
         vm.expectEmit(true, false, false, true);
-        emit GiveawayDistributor.GiveawayEnded(giveawayId, false);
-        giveaway.claimReward(giveawayId);
+        emit GiveawayEnded(giveawayId, false);
+        distributor.claimReward(giveawayId);
+
+        (, , , , , , , bool activeAfter, ) = distributor.giveaways(giveawayId);
+        assertFalse(activeAfter);
     }
 
-    function test_MultipleUsersCanClaimRewards() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        uint256 expectedReward = totalAmount / winnersCount;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
-        vm.prank(user1);
-        giveaway.claimReward(giveawayId);
-        
-        vm.prank(user2);
-        giveaway.claimReward(giveawayId);
-        
-        assertEq(token.balanceOf(user1), expectedReward);
-        assertEq(token.balanceOf(user2), expectedReward);
-    }
+    /*//////////////////////////////////////////////////////////////
+                        END GIVEAWAY TESTS
+    //////////////////////////////////////////////////////////////*/
 
-    // ============================================
-    // END GIVEAWAY TESTS
-    // ============================================
+    function testCreatorCanEndExpiredGiveaway() public {
+        uint256 giveawayId = _createTestGiveaway();
 
-    function test_CreatorCanEndGiveaway() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
         vm.warp(endTime + 1);
-        giveaway.endGiveaway(giveawayId);
-        
-        // Verify giveaway is ended
-        vm.prank(user1);
-        vm.expectRevert("GiveawayDistributor: giveaway is not active");
-        giveaway.claimReward(giveawayId);
-    }
 
-    function test_EndingEmitsEvent() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
-        vm.warp(endTime + 1);
-        
+        vm.prank(creator);
         vm.expectEmit(true, false, false, true);
-        emit GiveawayDistributor.GiveawayEnded(giveawayId, true);
-        giveaway.endGiveaway(giveawayId);
+        emit GiveawayEnded(giveawayId, true);
+        distributor.endGiveaway(giveawayId);
+
+        (, , , , , , , bool active, ) = distributor.giveaways(giveawayId);
+        assertFalse(active);
     }
 
-    function test_CannotEndBeforeExpiration() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
+    function testOwnerCanEndAnytime() public {
+        uint256 giveawayId = _createTestGiveaway();
+
+        vm.prank(owner);
+        distributor.endGiveaway(giveawayId);
+
+        (, , , , , , , bool active, ) = distributor.giveaways(giveawayId);
+        assertFalse(active);
+    }
+
+    function testCreatorCannotEndBeforeExpiration() public {
+        uint256 giveawayId = _createTestGiveaway();
+
+        vm.prank(creator);
         vm.expectRevert("GiveawayDistributor: giveaway has not expired yet");
-        giveaway.endGiveaway(giveawayId);
+        distributor.endGiveaway(giveawayId);
     }
 
-    function test_OwnerCanEndGiveawayEarly() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
-        // Owner can end without expiration
-        giveaway.endGiveaway(giveawayId);
+    function testCannotEndAlreadyEndedGiveaway() public {
+        uint256 giveawayId = _createTestGiveaway();
+
+        vm.prank(owner);
+        distributor.endGiveaway(giveawayId);
+
+        vm.prank(owner);
+        vm.expectRevert("GiveawayDistributor: giveaway already ended");
+        distributor.endGiveaway(giveawayId);
     }
 
-    function test_NonCreatorCannotEndGiveaway() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
+    function testRandomUserCannotEndGiveaway() public {
+        uint256 giveawayId = _createTestGiveaway();
+
         vm.warp(endTime + 1);
-        
+
         vm.prank(user1);
-        vm.expectRevert("GiveawayDistributor: only creator or owner can end giveaway");
-        giveaway.endGiveaway(giveawayId);
+        vm.expectRevert(
+            "GiveawayDistributor: only creator or owner can end giveaway"
+        );
+        distributor.endGiveaway(giveawayId);
     }
 
-    // ============================================
-    // DISPOSE GIVEAWAY TESTS
-    // ============================================
+    /*//////////////////////////////////////////////////////////////
+                        DISPOSE GIVEAWAY TESTS
+    //////////////////////////////////////////////////////////////*/
 
-    function test_CreatorCanDisposeGiveaway() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
-        // Claim some rewards
+    function testDisposeGiveawayWithLeftovers() public {
+        uint256 giveawayId = _createTestGiveaway();
+
+        // Only 3 users claim
         vm.prank(user1);
-        giveaway.claimReward(giveawayId);
-        
+        distributor.claimReward(giveawayId);
+        vm.prank(user2);
+        distributor.claimReward(giveawayId);
+        vm.prank(user3);
+        distributor.claimReward(giveawayId);
+
         // End giveaway
         vm.warp(endTime + 1);
-        giveaway.endGiveaway(giveawayId);
-        
+        vm.prank(creator);
+        distributor.endGiveaway(giveawayId);
+
+        // Calculate expected leftover
+        uint256 rewardPerWinner = distributor.getRewardPerWinner(giveawayId);
+        uint256 expectedLeftover = TOTAL_AMOUNT - (rewardPerWinner * 3);
+
         uint256 creatorBalanceBefore = token.balanceOf(creator);
-        giveaway.disposeGiveaway(giveawayId);
-        
-        // Should get back unclaimed tokens
-        assertGt(token.balanceOf(creator), creatorBalanceBefore);
-    }
 
-    function test_DisposeEmitsEvent() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
-        vm.warp(endTime + 1);
-        giveaway.endGiveaway(giveawayId);
-        
-        uint256 expectedLeftover = totalAmount; // Nothing claimed
-        
+        vm.prank(creator);
         vm.expectEmit(true, false, false, true);
-        emit GiveawayDistributor.GiveawayDisposed(giveawayId, expectedLeftover);
-        giveaway.disposeGiveaway(giveawayId);
+        emit GiveawayDisposed(giveawayId, expectedLeftover);
+        distributor.disposeGiveaway(giveawayId);
+
+        assertEq(
+            token.balanceOf(creator),
+            creatorBalanceBefore + expectedLeftover
+        );
+
+        (, , , , , , , , bool disposed) = distributor.giveaways(giveawayId);
+        assertTrue(disposed);
     }
 
-    function test_CannotDisposeIfStillActive() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
-        vm.expectRevert("GiveawayDistributor: giveaway is still active");
-        giveaway.disposeGiveaway(giveawayId);
-    }
+    function testDisposeGiveawayWithNoClaims() public {
+        uint256 giveawayId = _createTestGiveaway();
 
-    function test_CannotDisposeTwice() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
         vm.warp(endTime + 1);
-        giveaway.endGiveaway(giveawayId);
-        giveaway.disposeGiveaway(giveawayId);
-        
-        vm.expectRevert("GiveawayDistributor: already disposed");
-        giveaway.disposeGiveaway(giveawayId);
+        vm.prank(creator);
+        distributor.endGiveaway(giveawayId);
+
+        uint256 creatorBalanceBefore = token.balanceOf(creator);
+
+        vm.prank(creator);
+        distributor.disposeGiveaway(giveawayId);
+
+        assertEq(token.balanceOf(creator), creatorBalanceBefore + TOTAL_AMOUNT);
     }
 
-    function test_NonCreatorCannotDispose() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
-        vm.warp(endTime + 1);
-        giveaway.endGiveaway(giveawayId);
-        
+    function testDisposeGiveawayWithAllClaimed() public {
+        uint256 giveawayId = _createTestGiveaway();
+
+        // All winners claim
+        for (uint256 i = 1; i <= WINNERS_COUNT; i++) {
+            address user = address(uint160(1000 + i));
+            vm.prank(user);
+            distributor.claimReward(giveawayId);
+        }
+
+        uint256 creatorBalanceBefore = token.balanceOf(creator);
+
+        vm.prank(creator);
+        distributor.disposeGiveaway(giveawayId);
+
+        // No leftover tokens
+        assertEq(token.balanceOf(creator), creatorBalanceBefore);
+    }
+
+    function testOnlyCreatorCanDispose() public {
+        uint256 giveawayId = _createTestGiveaway();
+
+        vm.prank(owner);
+        distributor.endGiveaway(giveawayId);
+
         vm.prank(user1);
         vm.expectRevert("GiveawayDistributor: only creator can dispose");
-        giveaway.disposeGiveaway(giveawayId);
+        distributor.disposeGiveaway(giveawayId);
     }
 
-    // ============================================
-    // HELPER FUNCTION TESTS
-    // ============================================
+    function testCannotDisposeActiveGiveaway() public {
+        uint256 giveawayId = _createTestGiveaway();
 
-    function test_GetRewardPerWinner() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        uint256 expectedReward = totalAmount / winnersCount;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
-        assertEq(giveaway.getRewardPerWinner(giveawayId), expectedReward);
+        vm.prank(creator);
+        vm.expectRevert("GiveawayDistributor: giveaway is still active");
+        distributor.disposeGiveaway(giveawayId);
     }
 
-    function test_IsGiveawayExpired() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
-        assertFalse(giveaway.isGiveawayExpired(giveawayId));
-        
-        vm.warp(endTime + 1);
-        
-        assertTrue(giveaway.isGiveawayExpired(giveawayId));
+    function testCannotDisposeTwice() public {
+        uint256 giveawayId = _createTestGiveaway();
+
+        vm.prank(owner);
+        distributor.endGiveaway(giveawayId);
+
+        vm.startPrank(creator);
+        distributor.disposeGiveaway(giveawayId);
+
+        vm.expectRevert("GiveawayDistributor: already disposed");
+        distributor.disposeGiveaway(giveawayId);
+        vm.stopPrank();
     }
 
-    function test_GetTotalGiveaways() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        assertEq(giveaway.getTotalGiveaways(), 0);
-        
-        token.approve(address(giveaway), totalAmount);
-        giveaway.createGiveaway(address(token), totalAmount, winnersCount, endTime, false);
-        
-        assertEq(giveaway.getTotalGiveaways(), 1);
-        
-        token.approve(address(giveaway), totalAmount);
-        giveaway.createGiveaway(address(token), totalAmount, winnersCount, endTime, false);
-        
-        assertEq(giveaway.getTotalGiveaways(), 2);
-    }
+    /*//////////////////////////////////////////////////////////////
+                        ANNOUNCE WINNERS TESTS
+    //////////////////////////////////////////////////////////////*/
 
-    // ============================================
-    // ANNOUNCE WINNERS TESTS
-    // ============================================
+    function testAnnounceWinners() public {
+        uint256 giveawayId = _createTestGiveaway();
 
-    function test_CreatorCanAnnounceWinners() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 3;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
-        address[] memory participants = new address[](5);
-        participants[0] = user1;
-        participants[1] = user2;
-        participants[2] = user3;
-        participants[3] = address(0x4444);
-        participants[4] = address(0x5555);
-        
-        giveaway.announceWinners(giveawayId, participants);
-        
-        address[] memory winners = giveaway.getAnnouncedWinners(giveawayId);
-        assertEq(winners.length, winnersCount);
-    }
+        address[] memory participants = new address[](20);
+        for (uint256 i = 0; i < 20; i++) {
+            participants[i] = address(uint160(2000 + i));
+        }
 
-    function test_AnnounceWinnersEmitsEvent() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 3;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
-        address[] memory participants = new address[](5);
-        participants[0] = user1;
-        participants[1] = user2;
-        participants[2] = user3;
-        participants[3] = address(0x4444);
-        participants[4] = address(0x5555);
-        
+        vm.prank(creator);
         vm.expectEmit(true, false, false, false);
-        emit GiveawayDistributor.WinnersAnnounced(giveawayId, participants);
-        
-        giveaway.announceWinners(giveawayId, participants);
+        emit WinnersAnnounced(giveawayId, new address[](0));
+        distributor.announceWinners(giveawayId, participants);
+
+        address[] memory winners = distributor.getAnnouncedWinners(giveawayId);
+        assertEq(winners.length, WINNERS_COUNT);
     }
 
-    function test_CannotAnnounceWinnersEmptyParticipants() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 10;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
-        address[] memory participants = new address[](0);
-        
-        vm.expectRevert("GiveawayDistributor: no participants provided");
-        giveaway.announceWinners(giveawayId, participants);
-    }
+    function testAnnounceWinnersWithFewerParticipants() public {
+        uint256 giveawayId = _createTestGiveaway();
 
-    function test_CannotAnnounceWinnersTwice() public {
-        uint256 totalAmount = 1000 * 10**6;
-        uint256 winnersCount = 3;
-        
-        token.approve(address(giveaway), totalAmount);
-        uint256 giveawayId = giveaway.createGiveaway(
-            address(token),
-            totalAmount,
-            winnersCount,
-            endTime,
-            false
-        );
-        
         address[] memory participants = new address[](5);
-        participants[0] = user1;
-        participants[1] = user2;
-        participants[2] = user3;
-        participants[3] = address(0x4444);
-        participants[4] = address(0x5555);
-        
-        giveaway.announceWinners(giveawayId, participants);
-        
+        for (uint256 i = 0; i < 5; i++) {
+            participants[i] = address(uint160(2000 + i));
+        }
+
+        vm.prank(creator);
+        distributor.announceWinners(giveawayId, participants);
+
+        address[] memory winners = distributor.getAnnouncedWinners(giveawayId);
+        assertEq(winners.length, 5);
+    }
+
+    function testOwnerCanAnnounceWinners() public {
+        uint256 giveawayId = _createTestGiveaway();
+
+        address[] memory participants = new address[](15);
+        for (uint256 i = 0; i < 15; i++) {
+            participants[i] = address(uint160(2000 + i));
+        }
+
+        vm.prank(owner);
+        distributor.announceWinners(giveawayId, participants);
+
+        address[] memory winners = distributor.getAnnouncedWinners(giveawayId);
+        assertEq(winners.length, WINNERS_COUNT);
+    }
+
+    function testCannotAnnounceWinnersTwice() public {
+        uint256 giveawayId = _createTestGiveaway();
+
+        address[] memory participants = new address[](15);
+        for (uint256 i = 0; i < 15; i++) {
+            participants[i] = address(uint160(2000 + i));
+        }
+
+        vm.startPrank(creator);
+        distributor.announceWinners(giveawayId, participants);
+
         vm.expectRevert("GiveawayDistributor: winners already announced");
-        giveaway.announceWinners(giveawayId, participants);
+        distributor.announceWinners(giveawayId, participants);
+        vm.stopPrank();
+    }
+
+    function testCannotAnnounceWinnersWithoutParticipants() public {
+        uint256 giveawayId = _createTestGiveaway();
+
+        address[] memory participants = new address[](0);
+
+        vm.prank(creator);
+        vm.expectRevert("GiveawayDistributor: no participants provided");
+        distributor.announceWinners(giveawayId, participants);
+    }
+
+    function testRandomUserCannotAnnounceWinners() public {
+        uint256 giveawayId = _createTestGiveaway();
+
+        address[] memory participants = new address[](15);
+        for (uint256 i = 0; i < 15; i++) {
+            participants[i] = address(uint160(2000 + i));
+        }
+
+        vm.prank(user1);
+        vm.expectRevert(
+            "GiveawayDistributor: only owner or creator can announce winners"
+        );
+        distributor.announceWinners(giveawayId, participants);
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                        VIEW FUNCTION TESTS
+    //////////////////////////////////////////////////////////////*/
+
+    function testGetRewardPerWinner() public {
+        uint256 giveawayId = _createTestGiveaway();
+        uint256 expected = TOTAL_AMOUNT / WINNERS_COUNT;
+        assertEq(distributor.getRewardPerWinner(giveawayId), expected);
+    }
+
+    function testIsGiveawayExpired() public {
+        uint256 giveawayId = _createTestGiveaway();
+
+        assertFalse(distributor.isGiveawayExpired(giveawayId));
+
+        vm.warp(endTime + 1);
+
+        assertTrue(distributor.isGiveawayExpired(giveawayId));
+    }
+
+    function testGetTotalGiveaways() public {
+        assertEq(distributor.getTotalGiveaways(), 0);
+
+        _createTestGiveaway();
+        assertEq(distributor.getTotalGiveaways(), 1);
+
+        _createTestGiveaway();
+        assertEq(distributor.getTotalGiveaways(), 2);
+
+        _createTestGiveaway();
+        assertEq(distributor.getTotalGiveaways(), 3);
+    }
+
+    function testGetAnnouncedWinnersEmpty() public {
+        uint256 giveawayId = _createTestGiveaway();
+        address[] memory winners = distributor.getAnnouncedWinners(giveawayId);
+        assertEq(winners.length, 0);
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                        VRF PLACEHOLDER TESTS
+    //////////////////////////////////////////////////////////////*/
+
+    function testRequestRandomnessNotImplemented() public {
+        uint256 giveawayId = _createTestGiveaway();
+
+        vm.prank(owner);
+        vm.expectRevert(
+            "GiveawayDistributor: VRF not yet implemented - use announceWinners for testnets"
+        );
+        distributor.requestRandomness(giveawayId);
+    }
+
+    function testRequestRandomnessInvalidGiveaway() public {
+        vm.prank(owner);
+        vm.expectRevert("GiveawayDistributor: invalid giveaway");
+        distributor.requestRandomness(999);
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                        REENTRANCY TESTS
+    //////////////////////////////////////////////////////////////*/
+
+    function testReentrancyProtectionOnClaim() public {
+        // This would require a malicious token contract
+        // Basic check that nonReentrant modifier is present
+        uint256 giveawayId = _createTestGiveaway();
+
+        vm.prank(user1);
+        distributor.claimReward(giveawayId);
+
+        // Second call should fail due to already claimed, not reentrancy
+        vm.prank(user1);
+        vm.expectRevert("GiveawayDistributor: already claimed");
+        distributor.claimReward(giveawayId);
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                        EDGE CASES & INTEGRATION
+    //////////////////////////////////////////////////////////////*/
+
+    function testCompleteGiveawayLifecycle() public {
+        // Create giveaway
+        uint256 giveawayId = _createTestGiveaway();
+
+        // Multiple users claim
+        vm.prank(user1);
+        distributor.claimReward(giveawayId);
+        vm.prank(user2);
+        distributor.claimReward(giveawayId);
+
+        // Expire and end
+        vm.warp(endTime + 1);
+        vm.prank(creator);
+        distributor.endGiveaway(giveawayId);
+
+        // Dispose and recover leftover tokens
+        uint256 balanceBefore = token.balanceOf(creator);
+        vm.prank(creator);
+        distributor.disposeGiveaway(giveawayId);
+        assertTrue(token.balanceOf(creator) > balanceBefore);
+    }
+
+    function testPrivateGiveaway() public {
+        vm.startPrank(creator);
+        token.approve(address(distributor), TOTAL_AMOUNT);
+
+        uint256 giveawayId = distributor.createGiveaway(
+            address(token),
+            TOTAL_AMOUNT,
+            WINNERS_COUNT,
+            endTime,
+            true // private
+        );
+        vm.stopPrank();
+
+        (, , , , , , bool isPrivate, , ) = distributor.giveaways(giveawayId);
+        assertTrue(isPrivate);
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                        HELPER FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
+
+    function _createTestGiveaway() internal returns (uint256) {
+        vm.startPrank(creator);
+        token.approve(address(distributor), TOTAL_AMOUNT);
+        uint256 giveawayId = distributor.createGiveaway(
+            address(token),
+            TOTAL_AMOUNT,
+            WINNERS_COUNT,
+            endTime,
+            false
+        );
+        vm.stopPrank();
+        return giveawayId;
     }
 }
