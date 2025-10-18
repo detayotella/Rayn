@@ -128,3 +128,57 @@ Next steps:
   2. Copy contract addresses to your frontend .env
   3. Verify contracts on block explorer (if not auto-verified)
   4. Test the deployed contracts
+
+
+
+🔍 Verifying contracts on Lisk Sepolia...
+📡 API Key: W8GSV5VRJA...
+
+📝 Verifying RaynStable...
+Start verifying contract `0xDcf050285a799389dE82B02bf9283246dD781f13` deployed on 4202
+
+Submitting verification for [src/RaynStable.sol:RaynStable] 0xDcf050285a799389dE82B02bf9283246dD781f13.
+Submitted contract for verification:
+        Response: `OK`
+        GUID: `dcf050285a799389de82b02bf9283246dd781f1368f3a2f4`
+        URL: https://sepolia-blockscout.lisk.com/address/0xdcf050285a799389de82b02bf9283246dd781f13
+✅ RaynStable verified successfully
+
+📝 Verifying UsernameRegistry...
+Start verifying contract `0x6610d9AF8DA15b62edeC19E2E4faEb378A564CC0` deployed on 4202
+
+Submitting verification for [src/UsernameRegistry.sol:UsernameRegistry] 0x6610d9AF8DA15b62edeC19E2E4faEb378A564CC0.
+Submitted contract for verification:
+        Response: `OK`
+        GUID: `6610d9af8da15b62edec19e2e4faeb378a564cc068f3a2f9`
+        URL: https://sepolia-blockscout.lisk.com/address/0x6610d9af8da15b62edec19e2e4faeb378a564cc0
+✅ UsernameRegistry verified successfully
+
+📝 Verifying GiveawayDistributor...
+Start verifying contract `0x3b6e2Cf8E4b4b27188BccA88FfcC5B505742a803` deployed on 4202
+
+Submitting verification for [src/GiveawayDistributor.sol:GiveawayDistributor] 0x3b6e2Cf8E4b4b27188BccA88FfcC5B505742a803.
+Submitted contract for verification:
+        Response: `OK`
+        GUID: `3b6e2cf8e4b4b27188bcca88ffcc5b505742a80368f3a2ff`
+        URL: https://sepolia-blockscout.lisk.com/address/0x3b6e2cf8e4b4b27188bcca88ffcc5b505742a803
+✅ GiveawayDistributor verified successfully
+
+📝 Verifying RaynPaymentRouter...
+Start verifying contract `0xad3F6c7d78abD646104259c527C6092C3f8Dd52C` deployed on 4202
+Constructor args: 0x000000000000000000000000dcf050285a799389de82b02bf9283246dd781f13
+
+Submitting verification for [src/RaynPaymentRouter.sol:RaynPaymentRouter] 0xad3F6c7d78abD646104259c527C6092C3f8Dd52C.
+Submitted contract for verification:
+        Response: `OK`
+        GUID: `ad3f6c7d78abd646104259c527c6092c3f8dd52c68f3a304`
+        URL: https://sepolia-blockscout.lisk.com/address/0xad3f6c7d78abd646104259c527c6092c3f8dd52c
+✅ RaynPaymentRouter verified successfully
+
+✅ Verification process completed!
+
+📋 Check your contracts on Blockscout:
+   🔗 RaynStable: https://sepolia-blockscout.lisk.com/address/0xDcf050285a799389dE82B02bf9283246dD781f13
+   🔗 UsernameRegistry: https://sepolia-blockscout.lisk.com/address/0x6610d9AF8DA15b62edeC19E2E4faEb378A564CC0
+   🔗 GiveawayDistributor: https://sepolia-blockscout.lisk.com/address/0x3b6e2Cf8E4b4b27188BccA88FfcC5B505742a803
+   🔗 RaynPaymentRouter: https://sepolia-blockscout.lisk.com/address/0xad3F6c7d78abD646104259c527C6092C3f8Dd52C
