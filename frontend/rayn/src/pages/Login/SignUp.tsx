@@ -6,21 +6,37 @@ import Logo from "../../assets/Logo.png";
 
 export default function ChooseUsernamePage(): React.JSX.Element {
   const [username, setUsername] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   const [referralLink, setReferralLink] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
-  const { isWalletConnected } = useWallet();
+  const { isWalletConnected, usernameRegContract } = useWallet();
 
-  const handleContinue = (): void => {
-    if (username && isWalletConnected) {
-      sessionStorage.setItem("raynUsername", username);
-      if (referralLink) {
-        sessionStorage.setItem("raynReferralLink", referralLink);
-      } else {
-        sessionStorage.removeItem("raynReferralLink");
+  const handleContinue = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (username && isWalletConnected && usernameRegContract) {
+      setLoading(true);
+      try {
+        const _username = username.toLowerCase().replace(/[^a-z0-9_]/g, "");
+        const usernameReg = await usernameRegContract.registerUsername(
+          _username
+        );
+        await usernameReg.wait();
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoading(false);
+        sessionStorage.setItem("raynUsername", username);
+        if (referralLink) {
+          sessionStorage.setItem("raynReferralLink", referralLink);
+        } else {
+          sessionStorage.removeItem("raynReferralLink");
+        }
+        navigate("/profile", { state: { username } });
       }
-      navigate("/profile", { state: { username } });
+    } else {
+      alert("Please connect your wallet and enter a username");
     }
   };
 
@@ -129,7 +145,7 @@ export default function ChooseUsernamePage(): React.JSX.Element {
                 !username || !isWalletConnected ? "" : "hover:scale-105"
               } mx-auto`}
             >
-              Continue
+              {loading ? "Continuing..." : "Continue"}
             </button>
           </div>
 
