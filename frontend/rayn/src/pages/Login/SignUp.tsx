@@ -1,39 +1,43 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router';
+import React, { useState } from "react";
+import { useNavigate } from "react-router";
+import WalletConnectModal from "./WalletModal";
+import { useWallet } from "../../context/WalletContext";
 import Logo from "../../assets/Logo.png";
 
 export default function ChooseUsernamePage(): React.JSX.Element {
-  const [username, setUsername] = useState<string>('');
-  const [referralLink, setReferralLink] = useState<string>('');
-  const [isWalletConnected, setIsWalletConnected] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>("");
+  const [referralLink, setReferralLink] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const navigate = useNavigate();
+  const { isWalletConnected } = useWallet();
 
   const handleContinue = (): void => {
     if (username && isWalletConnected) {
-      sessionStorage.setItem('raynUsername', username);
+      sessionStorage.setItem("raynUsername", username);
       if (referralLink) {
-        sessionStorage.setItem('raynReferralLink', referralLink);
+        sessionStorage.setItem("raynReferralLink", referralLink);
       } else {
-        sessionStorage.removeItem('raynReferralLink');
+        sessionStorage.removeItem("raynReferralLink");
       }
-      navigate('/profile', { state: { username } });
+      navigate("/profile", { state: { username } });
     }
   };
 
-  const handleConnectWallet = (): void => {
-    setIsWalletConnected(true);
+  const handleUsernameChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ""));
   };
 
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''));
-  };
-
-  const handleReferralLinkChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleReferralLinkChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     setReferralLink(e.target.value);
   };
 
   const handleNavigateToSignIn = (): void => {
-    navigate('/sign-in');
+    navigate("/sign-in");
   };
 
   return (
@@ -41,8 +45,14 @@ export default function ChooseUsernamePage(): React.JSX.Element {
       {/* Header */}
       <header className="border-b border-gray-800/50 py-4 sm:py-5 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto flex items-center justify-center gap- sm:gap-">
-          <img src={Logo} alt="Rayn logo" className="w-8 h-8 sm:w-7 sm:h-7 md:w-12 md:h-12 object-contain" />
-          <span className="text-xl sm:text-2xl md:text-3xl font-bold text-white">Rayn</span>
+          <img
+            src={Logo}
+            alt="Rayn logo"
+            className="w-8 h-8 sm:w-7 sm:h-7 md:w-12 md:h-12 object-contain"
+          />
+          <span className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
+            Rayn
+          </span>
         </div>
       </header>
 
@@ -56,13 +66,16 @@ export default function ChooseUsernamePage(): React.JSX.Element {
 
           {/* Description */}
           <p className="text-gray-400 text-sm sm:text-base md:text-lg mb-8 sm:mb-10 md:mb-12 px-4 leading-relaxed">
-            Choose a unique @username so friends can find you on Rayn. If you have a referral link, add it below to connect rewards.
+            Choose a unique @username so friends can find you on Rayn. If you
+            have a referral link, add it below to connect rewards.
           </p>
 
           {/* Username Input */}
           <div className="mb-5 sm:mb-6 px-4">
             <div className="relative">
-              <span className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-500 text-base sm:text-lg">@</span>
+              <span className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-500 text-base sm:text-lg">
+                @
+              </span>
               <input
                 type="text"
                 value={username}
@@ -85,12 +98,22 @@ export default function ChooseUsernamePage(): React.JSX.Element {
 
           <div className="px-4 mb-4 sm:mb-5">
             <button
-              onClick={handleConnectWallet}
+              onClick={() => setIsModalOpen(true)}
               disabled={isWalletConnected}
-              className={`w-full max-w-md ${isWalletConnected ? 'bg-gray-700/60 cursor-not-allowed' : 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800'} text-white text-base sm:text-lg font-semibold py-3 sm:py-4 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform ${isWalletConnected ? '' : 'hover:scale-105'} mx-auto`}
+              className={`w-full max-w-md ${
+                isWalletConnected
+                  ? "bg-gray-700/60 cursor-not-allowed"
+                  : "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800"
+              } text-white text-base sm:text-lg font-semibold py-3 sm:py-4 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform ${
+                isWalletConnected ? "" : "hover:scale-105"
+              } mx-auto`}
             >
-              {isWalletConnected ? 'Wallet connected' : 'Connect wallet'}
+              {isWalletConnected ? "Wallet connected" : "Connect wallet"}
             </button>
+            <WalletConnectModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+            />
           </div>
 
           {/* Continue Button */}
@@ -98,7 +121,13 @@ export default function ChooseUsernamePage(): React.JSX.Element {
             <button
               onClick={handleContinue}
               disabled={!username || !isWalletConnected}
-              className={`w-full max-w-md ${!username || !isWalletConnected ? 'bg-gray-700/60 cursor-not-allowed' : 'bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800'} text-white text-base sm:text-lg font-semibold py-3 sm:py-4 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform ${!username || !isWalletConnected ? '' : 'hover:scale-105'} mx-auto`}
+              className={`w-full max-w-md ${
+                !username || !isWalletConnected
+                  ? "bg-gray-700/60 cursor-not-allowed"
+                  : "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800"
+              } text-white text-base sm:text-lg font-semibold py-3 sm:py-4 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform ${
+                !username || !isWalletConnected ? "" : "hover:scale-105"
+              } mx-auto`}
             >
               Continue
             </button>
