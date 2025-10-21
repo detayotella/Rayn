@@ -28,7 +28,7 @@ export default function CTASection() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center opacity-0 animate-fade-in-up delay-400">
-            <Link to="/sign-up">
+            <Link to="/onboarding">
               <button className="group bg-gradient-to-r from-white to-gray-100 text-purple-700 px-8 py-4 rounded-xl font-bold shadow-xl hover:shadow-2xl transition-all hover:scale-105 flex items-center gap-2 text-lg">
                 Get Started
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
