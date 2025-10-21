@@ -48,7 +48,7 @@ export default function CTASection() {
               <div className="text-sm text-gray-400">To Create</div>
             </div>
             <div>
-              <div className="text-3xl sm:text-4xl font-bold text-white mb-1">@username</div>
+              <div className="text-3xl sm:text-4xl font-bold text-white mb-1">Username</div>
               <div className="text-sm text-gray-400">Distribution</div>
             </div>
             <div>
