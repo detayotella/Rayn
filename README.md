@@ -224,7 +224,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 **Built by the Rayn Team**
-Team Members: 
 - Tella Adetayo
 - Iyanuoluwa Owoseni
 - Nwajei Valerie
