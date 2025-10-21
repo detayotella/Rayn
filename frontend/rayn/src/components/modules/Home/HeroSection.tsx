@@ -30,11 +30,11 @@ export default function HeroSection() {
             
             <p className="text-gray-300 text-lg sm:text-xl lg:w-4/5 leading-relaxed opacity-0 animate-fade-in-up delay-200">
               Host stablecoin giveaways for your community or participate in existing ones. 
-              Send rewards using simple @usernames - no complex wallet addresses needed.
+              Send rewards using simple usernames - no complex wallet addresses needed.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start opacity-0 animate-fade-in-up delay-300">
-              <Link to="/giveaway">
+              <Link to="/sign-up">
                 <button className="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 px-8 py-4 rounded-xl font-semibold transition-all shadow-xl shadow-purple-500/30 hover:shadow-purple-500/50 hover:scale-105 text-white text-lg">
                   Launch App →
                 </button>

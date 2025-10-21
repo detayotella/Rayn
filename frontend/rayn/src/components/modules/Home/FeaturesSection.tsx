@@ -37,7 +37,7 @@ export default function FeaturesSection() {
               <div className="w-14 h-14 bg-gradient-to-br from-purple-600 to-purple-500 rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-purple-500/30">
                 <User className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-xl font-bold mb-4 text-white">@Username Distribution</h3>
+              <h3 className="text-xl font-bold mb-4 text-white">Username Distribution</h3>
               <p className="text-gray-300 leading-relaxed">
                 Simply enter receiver's username to send rewards without requiring wallet addresses. It's fast, easy, and user-friendly.
               </p>
