@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
                 <FiTwitter className="text-lg" />
               </a>
               <a
-                href="https://github.com"
+                href="https://github.com/detayotella/Rayn"
                 aria-label="GitHub"
                 className="w-10 h-10 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 hover:border-purple-500/40 flex items-center justify-center text-gray-400 hover:text-white transition-all"
                 target="_blank"
