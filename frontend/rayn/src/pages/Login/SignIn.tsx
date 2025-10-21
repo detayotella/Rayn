@@ -331,8 +331,8 @@ export default function SignIn(): React.JSX.Element {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#191022] to-[#231036] flex flex-col">
-      <header className="border-b border-gray-800/50 py-4 sm:py-5 px-4 sm:px-6">
+    <div className="min-h-screen bg-gradient-to-b from-[#251435] to-[#2e1a47] flex flex-col">
+      <header className="border-b border-gray-700/50 py-4 sm:py-5 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 sm:gap-3">
           <img
             src={Logo}
@@ -351,13 +351,13 @@ export default function SignIn(): React.JSX.Element {
             Sign in
           </h1>
 
-          <p className="text-gray-400 text-sm sm:text-base md:text-lg mb-8 sm:mb-10 md:mb-12 px-4 leading-relaxed">
+          <p className="text-gray-300 text-sm sm:text-base md:text-lg mb-8 sm:mb-10 md:mb-12 px-4 leading-relaxed">
             Enter your @username and connect your wallet to continue to Rayn.
           </p>
 
           <div className="mb-6 sm:mb-8 px-4">
             <div className="relative">
-              <span className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-500 text-base sm:text-lg">
+              <span className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-400 text-base sm:text-lg">
                 @
               </span>
               <input
@@ -365,11 +365,11 @@ export default function SignIn(): React.JSX.Element {
                 value={username}
                 onChange={handleUsernameChange}
                 placeholder="username"
-                className={`w-full bg-transparent border rounded-2xl py-3 sm:py-4 pl-9 sm:pl-10 pr-4 sm:pr-5 text-white placeholder-gray-500 focus:outline-none transition-colors text-base sm:text-lg ${validation.error
+                className={`w-full bg-transparent border rounded-2xl py-3 sm:py-4 pl-9 sm:pl-10 pr-4 sm:pr-5 text-white placeholder-gray-400 focus:outline-none transition-colors text-base sm:text-lg ${validation.error
                     ? "border-red-500/50 focus:border-red-500"
                     : validation.usernameExists && validation.walletMatches
                       ? "border-green-500/50 focus:border-green-500"
-                      : "border-gray-700/50 focus:border-purple-600"
+                      : "border-gray-600/60 focus:border-purple-600"
                   }`}
               />
             </div>
@@ -409,11 +409,11 @@ export default function SignIn(): React.JSX.Element {
           </div>
 
           <div className="px-4 mt-6">
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-400 text-sm">
               Don't have an account?{" "}
               <button
                 onClick={() => navigate("/sign-up")}
-                className="text-purple-400 hover:text-purple-300 transition-colors"
+                className="text-purple-300 hover:text-purple-200 transition-colors"
               >
                 Sign up
               </button>

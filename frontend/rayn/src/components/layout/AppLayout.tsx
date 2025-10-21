@@ -11,12 +11,12 @@ interface AppLayoutProps {
  */
 const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#191022] via-[#231036] to-[#191022]">
+    <div className="min-h-screen bg-gradient-to-b from-[#251435] to-[#2e1a47] text-white flex">
       {/* Desktop Sidebar Navigation */}
       <Sidebar />
       
       {/* Main Content Area - shifted right on desktop to accommodate sidebar */}
-      <div className="lg:pl-64 min-h-screen">
+      <div className="flex-1 w-full lg:pl-64 min-h-screen">
         {children}
       </div>
       

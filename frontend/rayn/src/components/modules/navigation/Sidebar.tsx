@@ -25,9 +25,9 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <aside className="hidden lg:flex lg:flex-col lg:fixed lg:left-0 lg:top-0 lg:h-screen lg:w-64 bg-[#1a0b2e]/95 backdrop-blur-lg border-r border-purple-900/30 z-40">
+    <aside className="hidden lg:flex lg:flex-col lg:fixed lg:left-0 lg:top-0 lg:h-screen lg:w-64 bg-[#261540]/95 backdrop-blur-lg border-r border-purple-900/30 z-40">
       {/* Logo Section */}
-      <div className="p-6 border-b border-purple-900/30">
+      <div className="p-2.5 border-b border-purple-900/30">
         <button 
           onClick={() => navigate('/')}
           className="flex items-center gap- hover:opacity-80 transition-opacity"

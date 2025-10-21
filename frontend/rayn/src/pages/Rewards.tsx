@@ -27,7 +27,7 @@ const Rewards: React.FC = () => {
   return (
     <AppLayout>
       {/* Page Header */}
-      <header className="border-b border-purple-900/30 bg-[#1a0b2e]/50 backdrop-blur-sm sticky top-0 z-30">
+      <header className="border-b border-purple-900/30 bg-[#261540]/50 backdrop-blur-sm sticky top-0 z-30">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Mobile: Logo */}

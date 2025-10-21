@@ -4,7 +4,7 @@ import Logo from "../assets/Logo.png";
 
 export default function Onboarding(): React.JSX.Element {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#191022] to-[#231036] flex items-center justify-center p-4 sm:p-6 lg:p-8 font-DMSans">
+    <div className="min-h-screen bg-gradient-to-b from-[#251435] to-[#2e1a47] flex items-center justify-center p-4 sm:p-6 lg:p-8 font-DMSans">
       <div className="w-full max-w-xl text-center">
         {/* Logo/Icon Container */}
         <div className="mb-8 sm:mb-10 lg:mb-12 flex justify-center">

@@ -153,7 +153,7 @@ const GiveawayPage: React.FC = () => {
   return (
     <AppLayout>
       {/* Page Header */}
-      <header className="border-b border-purple-900/30 bg-[#1a0b2e]/50 backdrop-blur-sm sticky top-0 z-30">
+      <header className="border-b border-purple-900/30 bg-[#261540]/50 backdrop-blur-sm sticky top-0 z-30">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Page Title */}
@@ -198,7 +198,7 @@ const GiveawayPage: React.FC = () => {
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-0 py-10 sm:py-16">
+      <main className="w-full px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
         <section className="text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold tracking-tight">
             Community Giveaways
@@ -471,7 +471,7 @@ const GiveawayPage: React.FC = () => {
             {discoverGiveaways.map((item) => (
               <div
                 key={item.id}
-                className="overflow-hidden rounded-3xl border border-purple-900/40 bg-gradient-to-br from-[#231036]/95 via-[#1a0d2f]/95 to-[#130924]/95 shadow-[0_18px_60px_rgba(72,25,129,0.35)]"
+                className="overflow-hidden rounded-3xl border border-purple-900/40 bg-gradient-to-br from-[#2e1a47]/95 via-[#261540]/95 to-[#1f1238]/95 shadow-[0_18px_60px_rgba(72,25,129,0.35)]"
               >
                 <div className="bg-gradient-to-r from-[#f2d7ff] via-[#e4cffd] to-[#d7c4ff] p-8">
                   {item.image ? (

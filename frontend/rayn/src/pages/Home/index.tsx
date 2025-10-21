@@ -25,7 +25,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#191022] text-white font-DMSans">
+    <div className="min-h-screen bg-[#251435] text-white font-DMSans">
       <Navigation 
         mobileMenuOpen={mobileMenuOpen} 
         setMobileMenuOpen={setMobileMenuOpen} 

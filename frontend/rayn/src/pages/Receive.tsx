@@ -218,7 +218,7 @@ export default function Receive(): React.JSX.Element {
   return (
     <AppLayout>
       {/* Page Header */}
-      <header className="border-b border-purple-900/30 bg-[#1a0b2e]/50 backdrop-blur-sm sticky top-0 z-30">
+      <header className="border-b border-purple-900/30 bg-[#261540]/50 backdrop-blur-sm sticky top-0 z-30">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Page Title */}
@@ -248,7 +248,7 @@ export default function Receive(): React.JSX.Element {
             {/* Close Button - Desktop */}
             <button
               onClick={() => navigate("/dashboard")}
-              className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-purple-900/30 transition-colors"
+              className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-purple-900/30 transition-colors"
             >
               <X className="w-5 h-5" />
               <span>Close</span>
@@ -265,7 +265,7 @@ export default function Receive(): React.JSX.Element {
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
               Receive Payment
             </h1>
-            <p className="text-gray-400 text-sm sm:text-base md:text-lg">
+            <p className="text-gray-300 text-sm sm:text-base md:text-lg">
               Generate a payment link to request funds from others.
             </p>
           </div>
@@ -282,7 +282,7 @@ export default function Receive(): React.JSX.Element {
                     Your Username
                   </label>
                   <div className="relative">
-                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-300">
                       <User className="w-5 h-5" />
                     </div>
                     <input
@@ -290,7 +290,7 @@ export default function Receive(): React.JSX.Element {
                       value={username}
                       onChange={handleUsernameChange}
                       placeholder="username"
-                      className={`w-full bg-[#1e1533] border rounded-xl py-3 sm:py-4 pl-12 pr-4 text-base text-white placeholder-gray-500 focus:outline-none transition-colors ${validation.error
+                      className={`w-full bg-[#1e1533] border rounded-xl py-3 sm:py-4 pl-12 pr-4 text-base text-white placeholder-gray-400 focus:outline-none transition-colors ${validation.error
                           ? "border-red-500/50 focus:border-red-500"
                           : validation.isValid
                             ? "border-green-500/50 focus:border-green-500"
@@ -311,7 +311,7 @@ export default function Receive(): React.JSX.Element {
                     value={amount}
                     onChange={handleAmountChange}
                     placeholder="$ 0.00"
-                    className="w-full bg-[#1e1533] border border-purple-900/30 rounded-xl py-3 sm:py-4 px-4 text-base text-white placeholder-gray-500 focus:outline-none focus:border-purple-600/50 transition-colors"
+                    className="w-full bg-[#1e1533] border border-purple-900/30 rounded-xl py-3 sm:py-4 px-4 text-base text-white placeholder-gray-400 focus:outline-none focus:border-purple-600/50 transition-colors"
                   />
                 </div>
 
@@ -325,7 +325,7 @@ export default function Receive(): React.JSX.Element {
                     value={note}
                     onChange={handleNoteChange}
                     placeholder="For coffee"
-                    className="w-full bg-[#1e1533] border border-purple-900/30 rounded-xl py-3 sm:py-4 px-4 text-base text-white placeholder-gray-500 focus:outline-none focus:border-purple-600/50 transition-colors"
+                    className="w-full bg-[#1e1533] border border-purple-900/30 rounded-xl py-3 sm:py-4 px-4 text-base text-white placeholder-gray-400 focus:outline-none focus:border-purple-600/50 transition-colors"
                   />
                 </div>
 
@@ -347,7 +347,7 @@ export default function Receive(): React.JSX.Element {
 
               {/* Helper Text */}
               <div className="mt-6 space-y-2">
-                <p className="text-center text-gray-400 text-sm">
+                <p className="text-center text-gray-300 text-sm">
                   Share this link with the sender to receive funds.
                 </p>
                 {!isWalletConnected && (
@@ -392,7 +392,7 @@ export default function Receive(): React.JSX.Element {
                       <p className="font-semibold text-base sm:text-lg mb-1">
                         Received $50.00
                       </p>
-                      <p className="text-gray-400 text-sm">From @john.doe</p>
+                      <p className="text-gray-300 text-sm">From @john.doe</p>
                     </div>
                   </div>
                 </div>

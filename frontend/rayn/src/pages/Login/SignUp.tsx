@@ -524,9 +524,9 @@ export default function ChooseUsernamePage(): React.JSX.Element {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#191022] to-[#231036] flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-[#251435] to-[#2e1a47] flex flex-col">
       {/* Header */}
-      <header className="border-b border-gray-800/50 py-4 sm:py-5 px-4 sm:px-6">
+      <header className="border-b border-gray-700/50 py-4 sm:py-5 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 sm:gap-3">
           <img
             src={Logo}
@@ -548,7 +548,7 @@ export default function ChooseUsernamePage(): React.JSX.Element {
           </h1>
 
           {/* Description */}
-          <p className="text-gray-400 text-sm sm:text-base md:text-lg mb-8 sm:mb-10 md:mb-12 px-4 leading-relaxed">
+          <p className="text-gray-300 text-sm sm:text-base md:text-lg mb-8 sm:mb-10 md:mb-12 px-4 leading-relaxed">
             Choose a unique @username so friends can find you on Rayn. If you
             have a referral link, add it below to connect rewards.
           </p>
@@ -556,7 +556,7 @@ export default function ChooseUsernamePage(): React.JSX.Element {
           {/* Username Input */}
           <div className="mb-5 sm:mb-6 px-4">
             <div className="relative">
-              <span className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-500 text-base sm:text-lg">
+              <span className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 text-gray-400 text-base sm:text-lg">
                 @
               </span>
               <input
@@ -564,11 +564,11 @@ export default function ChooseUsernamePage(): React.JSX.Element {
                 value={username}
                 onChange={handleUsernameChange}
                 placeholder="username"
-                className={`w-full bg-transparent border rounded-2xl py-3 sm:py-4 pl-9 sm:pl-10 pr-4 sm:pr-5 text-white placeholder-gray-500 focus:outline-none transition-colors text-base sm:text-lg ${validation.usernameError
+                className={`w-full bg-transparent border rounded-2xl py-3 sm:py-4 pl-9 sm:pl-10 pr-4 sm:pr-5 text-white placeholder-gray-400 focus:outline-none transition-colors text-base sm:text-lg ${validation.usernameError
                     ? "border-red-500/50 focus:border-red-500"
                     : validation.isUsernameValid && validation.usernameAvailable
                       ? "border-green-500/50 focus:border-green-500"
-                      : "border-gray-700/50 focus:border-purple-600"
+                      : "border-gray-600/60 focus:border-purple-600"
                   }`}
               />
             </div>
@@ -581,7 +581,7 @@ export default function ChooseUsernamePage(): React.JSX.Element {
               value={referralLink}
               onChange={handleReferralLinkChange}
               placeholder="Referral link (optional)"
-              className="w-full bg-transparent border border-gray-700/50 rounded-2xl py-3 sm:py-4 px-4 sm:px-5 text-white placeholder-gray-500 focus:outline-none focus:border-purple-600 transition-colors text-base sm:text-lg"
+              className="w-full bg-transparent border border-gray-600/60 rounded-2xl py-3 sm:py-4 px-4 sm:px-5 text-white placeholder-gray-400 focus:outline-none focus:border-purple-600 transition-colors text-base sm:text-lg"
             />
           </div>
 

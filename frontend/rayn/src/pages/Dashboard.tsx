@@ -14,7 +14,7 @@ export default function Dashboard(): React.JSX.Element {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, transactions: contextTransactions } = useApp();
+  const { transactions: contextTransactions } = useApp();
   const locationState =
     (location.state as { profileImage?: string | null } | null) ?? undefined;
 
@@ -83,7 +83,7 @@ export default function Dashboard(): React.JSX.Element {
   return (
     <AppLayout>
       {/* Page Header */}
-      <header className="border-b border-purple-900/30 bg-[#1a0b2e]/50 backdrop-blur-sm sticky top-0 z-30">
+      <header className="border-b border-purple-900/30 bg-[#261540]/50 backdrop-blur-sm sticky top-0 z-30">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Page Title - visible on mobile, hidden on desktop since sidebar shows logo */}
@@ -137,16 +137,16 @@ export default function Dashboard(): React.JSX.Element {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+      <main className="w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
         {/* Balance Card */}
         <div className="bg-gradient-to-br from-purple-900/40 to-purple-800/20 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 mb-6 sm:mb-8 border border-purple-700/30 shadow-2xl">
-          <p className="text-gray-400 text-sm sm:text-base mb-2">
+          <p className="text-gray-300 text-sm sm:text-base mb-2">
             Your Balance
           </p>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold">
             {loading ? "Loading..." : `${balance} ETH`}
           </h1>
-          <p className="text-gray-500 text-xs sm:text-sm mt-2">
+          <p className="text-gray-400 text-xs sm:text-sm mt-2">
             ≈ {(Number(balance) * 5770460).toFixed(2)} NGN
           </p>
         </div>
@@ -206,12 +206,12 @@ export default function Dashboard(): React.JSX.Element {
                       <p className="text-lg sm:text-xl font-bold">
                         ${transaction.amount.toFixed(2)}
                       </p>
-                      <p className="text-gray-400 text-sm sm:text-base">
+                      <p className="text-gray-300 text-sm sm:text-base">
                         {transaction.description}
                       </p>
                     </div>
                   </div>
-                  <p className="text-gray-400 text-sm sm:text-base">
+                  <p className="text-gray-300 text-sm sm:text-base">
                     {transaction.time}
                   </p>
                 </div>

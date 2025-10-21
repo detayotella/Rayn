@@ -523,7 +523,7 @@ const Send: React.FC = () => {
   return (
     <AppLayout>
       {/* Page Header */}
-      <header className="border-b border-purple-900/30 bg-[#1a0b2e]/50 backdrop-blur-sm sticky top-0 z-30">
+      <header className="border-b border-purple-900/30 bg-[#261540]/50 backdrop-blur-sm sticky top-0 z-30">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Page Title */}
@@ -553,7 +553,7 @@ const Send: React.FC = () => {
             {/* Close Button - Desktop */}
             <button
               onClick={() => navigate("/dashboard")}
-              className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-lg text-gray-400 hover:text-white hover:bg-purple-900/30 transition-colors"
+              className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-purple-900/30 transition-colors"
             >
               <X className="w-5 h-5" />
               <span>Close</span>
@@ -569,7 +569,7 @@ const Send: React.FC = () => {
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
             Send
           </h1>
-          <p className="text-gray-400 text-sm sm:text-base md:text-lg">
+          <p className="text-gray-300 text-sm sm:text-base md:text-lg">
             Send stablecoins to anyone instantly.
           </p>
         </div>
@@ -590,7 +590,7 @@ const Send: React.FC = () => {
               To
             </label>
             <div className="relative">
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-300">
                 <User className="w-5 h-5" />
               </div>
               <input
@@ -598,7 +598,7 @@ const Send: React.FC = () => {
                 value={recipient}
                 onChange={handleRecipientChange}
                 placeholder="@username or wallet address"
-                className={`w-full bg-[#1e1533] border rounded-xl sm:rounded-2xl py-4 sm:py-5 pl-12 pr-4 text-base sm:text-lg text-white placeholder-gray-500 focus:outline-none transition-colors ${recipientValidation.error
+                className={`w-full bg-[#1e1533] border rounded-xl sm:rounded-2xl py-4 sm:py-5 pl-12 pr-4 text-base sm:text-lg text-white placeholder-gray-400 focus:outline-none transition-colors ${recipientValidation.error
                     ? "border-red-500/50 focus:border-red-500"
                     : recipientValidation.isValid
                       ? "border-green-500/50 focus:border-green-500"
@@ -615,7 +615,7 @@ const Send: React.FC = () => {
               Amount
             </label>
             <div className="relative">
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg sm:text-xl">
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-300 text-lg sm:text-xl">
                 $
               </div>
               <input
@@ -623,7 +623,7 @@ const Send: React.FC = () => {
                 value={amount}
                 onChange={handleAmountChange}
                 placeholder="0.00"
-                className="w-full bg-[#1e1533] border border-purple-900/30 rounded-xl sm:rounded-2xl py-4 sm:py-5 pl-12 pr-4 text-base sm:text-lg text-white placeholder-gray-500 text-right focus:outline-none focus:border-purple-600/50 transition-colors"
+                className="w-full bg-[#1e1533] border border-purple-900/30 rounded-xl sm:rounded-2xl py-4 sm:py-5 pl-12 pr-4 text-base sm:text-lg text-white placeholder-gray-400 text-right focus:outline-none focus:border-purple-600/50 transition-colors"
               />
             </div>
           </div>
@@ -638,7 +638,7 @@ const Send: React.FC = () => {
               onChange={handleNoteChange}
               placeholder="What's this for?"
               rows={4}
-              className="w-full bg-[#1e1533] border border-purple-900/30 rounded-xl sm:rounded-2xl py-4 px-4 text-base sm:text-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-600/50 transition-colors resize-none"
+              className="w-full bg-[#1e1533] border border-purple-900/30 rounded-xl sm:rounded-2xl py-4 px-4 text-base sm:text-lg text-white placeholder-gray-400 focus:outline-none focus:border-purple-600/50 transition-colors resize-none"
             />
           </div>
 

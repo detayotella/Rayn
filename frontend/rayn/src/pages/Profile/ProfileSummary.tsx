@@ -58,7 +58,7 @@ export default function ProfileSummary(): React.JSX.Element {
 
   if (!profileData) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#191022] via-[#231036] to-[#191022] text-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-[#251435] via-[#2e1a47] to-[#251435] text-white flex items-center justify-center">
         <p className="text-gray-400">Loading profile...</p>
       </div>
     );
@@ -85,7 +85,7 @@ export default function ProfileSummary(): React.JSX.Element {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#191022] via-[#231036] to-[#191022] text-white flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-[#251435] via-[#2e1a47] to-[#251435] text-white flex flex-col">
       {/* Header */}
       <header className="border-b border-gray-800/40 px-4 sm:px-6 py-4 sm:py-5">
         <div className="max-w-5xl mx-auto flex items-center justify-between">

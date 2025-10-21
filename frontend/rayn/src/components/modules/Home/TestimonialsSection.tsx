@@ -12,24 +12,37 @@ type Props = {
 
 export default function TestimonialsSection({ testimonials }: Props) {
   return (
-    <section id="testimonials" className="bg-[#191022] py-20 ">
-      <div className="w-full px-2 sm:px-6 lg:px-10">{/* reduced horizontal padding */}
-        <h2 className="text-4xl lg:text-5xl font-bold text-center mb-16 text-white">What Our Users Say</h2>
-        <div className="grid md:grid-cols-3 gap-4 md:gap-6 lg:gap-10">{/* slightly tighter gaps on small screens */}
-          {testimonials.map((t, idx) => (
-            <div key={idx} className="rounded-2xl p-6 md:px-8 md:py-12 border border-purple-700/50">
+    <section id="testimonials" className="bg-[#251435] py-24 sm:py-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16 opacity-0 animate-fade-in-up">
+          <span className="inline-block px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-sm font-semibold mb-4">
+            Testimonials
+          </span>
+          <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold mb-6 text-white">
+            Trusted by <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Real People</span>
+          </h2>
+          <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+            See what our community has to say about their DeFi experience with Rayn.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {testimonials.map((t, idx) => {
+            const delays = ['delay-100', 'delay-200', 'delay-300', 'delay-400', 'delay-500', 'delay-600'];
+            return (
+            <div key={idx} className={`bg-gradient-to-br from-purple-900/40 to-purple-800/20 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 hover:border-purple-500/40 transition-all duration-300 hover:transform hover:-translate-y-2 shadow-lg opacity-0 animate-fade-in-up ${delays[idx % delays.length]}`}>
               <div className="flex items-center gap-4 mb-6">
-                <div className={`w-14 h-14 ${t.avatarBg} rounded-full flex items-center justify-center text-xl font-bold text-white`}>
+                <div className={`w-14 h-14 ${t.avatarBg} rounded-full flex items-center justify-center text-xl font-bold text-white shadow-lg`}>
                   {t.initial}
                 </div>
                 <div>
-                  <h4 className="font-bold text-white">{t.name}, {t.location}</h4>
-                  <p className="text-gray-400 text-sm">Rayn User</p>
+                  <h4 className="font-bold text-white text-lg">{t.name}</h4>
+                  <p className="text-purple-300 text-sm">{t.location}</p>
                 </div>
               </div>
-              <p className="text-gray-300">{`"${t.text}"`}</p>
+              <p className="text-gray-300 leading-relaxed italic">"{t.text}"</p>
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

@@ -161,9 +161,9 @@ export default function SocialFeed(): React.JSX.Element {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#191022] via-[#231036] to-[#191022] text-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#251435] via-[#2e1a47] to-[#251435] text-white">
       {/* Header */}
-      <header className="border-b border-purple-900/30 bg-[#1a0b2e]/80 backdrop-blur-sm">
+      <header className="border-b border-purple-900/30 bg-[#261540]/80 backdrop-blur-sm">
         <div className="mx-2 px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
             <div className="flex items-center gap-2 sm:gap-3">
