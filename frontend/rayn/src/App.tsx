@@ -8,7 +8,7 @@ const App: React.FC = () => {
   return (
     <AppProvider>
       <WalletProvider>
-        <div className="mx-auto font-dmsans text-[16px] text-dark w-[100%]">
+        <div className="min-h-screen font-dmsans text-base text-white">
           <AppRouter />
           <NotificationToast />
         </div>
