@@ -21,7 +21,7 @@ export default function HeroSection() {
               <span className="text-sm text-purple-200 font-medium">Live on Sepolia Testnet</span>
             </div> */}
             
-            <h1 className="text-fluid-display font-bold leading-tight text-white opacity-0 animate-fade-in-up delay-100">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-6xl font-bold leading-tight text-white opacity-0 animate-fade-in-up delay-100">
               Create & Join Crypto
               <span className="block mt-2 bg-gradient-to-r from-purple-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">
                 Giveaways with Ease
