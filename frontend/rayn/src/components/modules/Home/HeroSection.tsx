@@ -11,24 +11,24 @@ export default function HeroSection() {
       <div className="absolute top-20 right-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
       <div className="absolute bottom-20 left-0 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl"></div>
       
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-32">
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
+        <div className="grid gap-10 lg:gap-16 lg:grid-cols-2 lg:items-center">
           {/* Left Content */}
-          <div className="w-full space-y-8 text-center lg:text-left opacity-0 animate-fade-in-up">
+          <div className="w-full space-y-6 sm:space-y-8 text-center lg:text-left opacity-0 animate-fade-in-up">
             {/* Badge */}
             {/* <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 backdrop-blur-sm">
               <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
               <span className="text-sm text-purple-200 font-medium">Live on Sepolia Testnet</span>
             </div> */}
             
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-6xl font-bold leading-tight text-white opacity-0 animate-fade-in-up delay-100">
+            <h1 className="text-fluid-display font-bold leading-tight text-white opacity-0 animate-fade-in-up delay-100">
               Create & Join Crypto
               <span className="block mt-2 bg-gradient-to-r from-purple-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">
                 Giveaways with Ease
               </span>
             </h1>
             
-            <p className="text-gray-300 text-lg sm:text-xl lg:w-4/5 leading-relaxed opacity-0 animate-fade-in-up delay-200">
+            <p className="text-gray-300 text-fluid-subtitle lg:w-4/5 leading-relaxed opacity-0 animate-fade-in-up delay-200">
               Host stablecoin giveaways for your community or participate in existing ones. 
               Send rewards using simple usernames - no complex wallet addresses needed.
             </p>
@@ -47,7 +47,7 @@ export default function HeroSection() {
             </div>
             
             {/* Trust Indicators */}
-            <div className="grid grid-cols-3 gap-4 pt-8 border-t border-purple-500/20 opacity-0 animate-fade-in-up delay-400">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 sm:pt-8 border-t border-purple-500/20 opacity-0 animate-fade-in-up delay-400">
               <div className="text-center lg:text-left">
                 <div className="flex items-center justify-center lg:justify-start gap-2 text-purple-300 mb-1">
                   <Users className="w-5 h-5" />

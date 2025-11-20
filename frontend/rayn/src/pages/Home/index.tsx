@@ -24,24 +24,24 @@ export default function Home() {
     setEmail(e.target.value);
   };
 
-  return (
-    <div className="min-h-screen bg-[#251435] text-white font-DMSans">
-      <Navigation 
-        mobileMenuOpen={mobileMenuOpen} 
-        setMobileMenuOpen={setMobileMenuOpen} 
+    return (
+    <div className="min-h-screen bg-[#251435] text-white font-dmsans">
+      <Navigation
+        mobileMenuOpen={mobileMenuOpen}
+        setMobileMenuOpen={setMobileMenuOpen}
       />
       {/* Add padding to prevent content from hiding behind fixed navbar */}
-      <div className="pt-20">
+      <div className="pt-20 space-y-16 sm:space-y-24">
         <HeroSection />
-      <FeaturesSection />
-      <TestimonialsSection testimonials={testimonials} />
-      <CTASection />
-      <NewsletterSection 
-        email={email}
-        handleEmailChange={handleEmailChange}
-        handleSubscribe={handleSubscribe}
-      />
-      <Footer />
+        <FeaturesSection />
+        <TestimonialsSection testimonials={testimonials} />
+        <CTASection />
+        <NewsletterSection
+          email={email}
+          handleEmailChange={handleEmailChange}
+          handleSubscribe={handleSubscribe}
+        />
+        <Footer />
       </div>
     </div>
   );

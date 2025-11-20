@@ -24,6 +24,7 @@ body {
   background: #120824;
   color: #f9f7ff;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* Pointer cursor for interactive elements */
